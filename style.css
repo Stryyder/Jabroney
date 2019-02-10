@@ -1,0 +1,19 @@
+body {
+background-color: #000;
+
+}
+main {
+	display: block;
+	margin: 0 auto;
+	text-align: center;
+	width: 100%;
+	padding: 20px;
+}
+canvas {
+	border: 1px dashed #222;
+	
+}
+statusBoard{
+	border: 1px solid green;
+	
+}
