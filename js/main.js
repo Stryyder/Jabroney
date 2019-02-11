@@ -34,11 +34,11 @@
 	const cvs2 = document.getElementById("statusBoard").getContext("2d");
 
 	// Game Globals
-	let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	let level = 1;
-	let highScore = 0; //localStorage.setItem(), clear(), removeItem() etc for high schores
+	let highScore = 0; //localStorage.setItem(), clear(), removeItem() etc for high scores
 	let teamScore = 0; // total team score for local storage
-	let scoreRate = .1;
+	let scoreRate = .1; 
+	let numPlayers = 1;
 	let starvationRate = 0.003;
 	let fullnessBoost = 0.1;
 	let hydrationBoost = 0.1;
@@ -80,7 +80,7 @@
 		scoreModifier: 600
 	};
 	// Player Objects
-	let Player = function(x, y, name, c ,tc){
+	let Player = function(x, y, name, c ,tc, statusX, statusY){
 			this.isAlive = true;
 			this.lives = 10;
 			this.snake = [{x: x, y: y}]; // Initialize coordinates for snake head (x,y) and for the tail (tx, ty)
@@ -96,6 +96,8 @@
 			this.parched = false;
 			this.name = name;
 			this.skipPop = false;
+			this.statusX = statusX;
+			this.statusY = statusY;
 						
 	};
 
@@ -107,45 +109,41 @@
 	
 	
 	// Instantiate Players and Enemies
-	let player1 = new Player(100,400, "Player1", "#80b3ff", "#ccddff");
-	let player2 = new Player(200,400, "Player2", "#00ff00", "#b3ffb3");
-	let player3 = new Player(300,400, "Player3", "#ff9900", "#ffd1b3");
+	let player1 = new Player(100,400, "Player1", "#80b3ff", "#ccddff", 50, 100);
+	let player2 = new Player(200,400, "Player2", "#00ff00", "#b3ffb3", 50, 250);
+	let player3 = new Player(300,400, "Player3", "#ff9900", "#ffd1b3", 50, 400);
 	
 	enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red"));
 
 	function drawGame(){
 			clearBoard();
 			
-				// Player 1
-				if (player1.isAlive){
-					boundaryCheck(player1);
-					drawStatus(player1, 50, 100, player1.color);
-					drawPlayers(player1);
-					updateFood(player1);
-					updateCoins(player1);
-					updateWater(player1);
-
+				function checkIfAlive(player){
+						if (player.isAlive){
+							boundaryCheck(player);
+							drawStatus(player, player.statusX, player.statusY, player.color);
+							drawPlayers(player);
+							updateFood(player);
+							updateCoins(player);
+							updateWater(player);
+						}
 				}
 				
-				// Player 2
-				if (player2.isAlive){
-					boundaryCheck(player2);
-					drawStatus(player2, 50, 250, player2.color);
-					drawPlayers(player2);
-					updateCoins(player2);
-					updateFood(player2);
-					updateWater(player2);
-				}
+			
 				
-				// Player 3
-				if (player3.isAlive){
-					boundaryCheck(player3);
-					drawStatus(player3, 50, 400, player3.color);
-					drawPlayers(player3);
-					updateCoins(player3);
-					updateFood(player3);
-					updateWater(player3);
-				}
+					// REDUCE FURTHER?
+				checkIfAlive(player1);
+				checkIfAlive(player2);
+				checkIfAlive(player3);
+				
+				
+				
+				/*for (let i = 1; i <= numPlayers; i++){
+						
+					checkIfAlive(playerToCheck);
+				}*/
+			
+				
 				
 				// General Draws
 					updateLevel();
@@ -597,17 +595,20 @@
 						// 1 player chosen
 						player2.isAlive = false; 
 						player3.isAlive = false;
+						numPlayers = 1;
 						direction();
 						break;
 					
 					case 50:
 						// 2 players chosen
 						player3.isAlive = false;
+						numPlayers = 2;
 						direction();
 					break;
 					
 					case 51:
 						// 3 players chosen
+						numPlayers = 3;
 						direction();
 					break;
 				}
