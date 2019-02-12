@@ -254,16 +254,7 @@
 				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "white"));
 				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "white"));
 				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#666699"));
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#666699"));
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#0066ff"));
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#0066ff"));
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "white"));
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "white"));
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#666699"));
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#666699"));
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#0066ff"));
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#0066ff"));
-				
+					
 			}
 		}
 			
