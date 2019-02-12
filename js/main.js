@@ -118,37 +118,28 @@
 	function drawGame(){
 			clearBoard();
 			
-				function checkIfAlive(player){
-						if (player.isAlive){
-							boundaryCheck(player);
-							drawStatus(player, player.statusX, player.statusY, player.color);
-							drawPlayers(player);
-							updateFood(player);
-							updateCoins(player);
-							updateWater(player);
-						}
-				}
-				
-			
-				
-					// REDUCE FURTHER?
-				checkIfAlive(player1);
-				checkIfAlive(player2);
-				checkIfAlive(player3);
-				
-				
-				
-				/*for (let i = 1; i <= numPlayers; i++){
-						
-					checkIfAlive(playerToCheck);
-				}*/
-			
-				
-				
+					function drawPlayerIfAlive(player){
+							if (player.isAlive){
+								boundaryCheck(player);
+								drawStatus(player, player.statusX, player.statusY, player.color);
+								drawPlayers(player);
+								updateFood(player);
+								updateCoins(player);
+								updateWater(player);
+							}
+					}
+					
+				// REDUCE FURTHER?
+				drawPlayerIfAlive(player1);
+				drawPlayerIfAlive(player2);
+				drawPlayerIfAlive(player3);
+					
+
 				// General Draws
 					updateLevel();
 					drawEnemies();
-					
+				
+				// Check for Game Over
 				if ((player1.isAlive == false) && (player2.isAlive == false) && (player3.isAlive == false)){
 					gameOver();
 				}
