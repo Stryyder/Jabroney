@@ -77,8 +77,9 @@
 		maxY: 580,
 		scoreModifier: 600
 	};
+
 	// Coordinates, name, color, tail color, score location coords
-	let Player = function(x, y, name, c ,tc, statusX, statusY){
+   	let Player = function(x, y, name, c ,tc, statusX, statusY){
 			this.isAlive = true;
 			this.lives = 10;
 			this.snake = [{x: x, y: y}]; // Initialize coordinates for snake head (x,y) and for the tail (tx, ty)
@@ -111,6 +112,7 @@
 	let player1 = new Player(100,400, "Bob", "#80b3ff", "#ccddff", 50, 100);
 	let player2 = new Player(200,400, "Carl", "#00ff00", "#b3ffb3", 50, 250);
 	let player3 = new Player(300,400, "Jimmy", "#ff9900", "#ffd1b3", 50, 400);
+
 	
 	enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red"));
 
