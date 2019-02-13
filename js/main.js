@@ -1,10 +1,5 @@
-/*
-	1. enemyAI
-	2. localStorage not saving correctly
-	3. shooting enemies!
-	4. Different enemy attacks
-	*/
 	
+	// Sound
 	let sndFood = new Audio(); sndFood.src = "sound/sndFood.wav";
 	let sndWater = new Audio (); sndWater.src = "sound/sndWater.wav";
 	let sndEat = new Audio(); sndEat.src = "sound/sndEat.wav";
@@ -20,7 +15,7 @@
 	let sndSaucer = new Audio(); sndSaucer.src ="sound/sndSaucer.mp3";
 	let sndZap = new Audio(); sndZap.src ="sound/sndZap.wav";
 	let sndGameOver = new Audio(); sndGameOver.src ="sound/sndGameOver.mp3"; sndGameOver.volume = 0.2;
-	
+	// Graphics
 	let imgSaucer = new Image(); imgSaucer.src ="img/imgSaucer.png";
 	let imgFood = new Image(); imgFood.src ="img/imgFood.png";
 	let imgWater = new Image(); imgWater.src ="img/imgWater.png";
@@ -30,6 +25,7 @@
 	let imgCoin = new Image(); imgCoin.src = "img/imgCoin.png";
 	let imgStatusBoard = new Image(); imgStatusBoard.src = "img/imgStatusBoard.png";
 	
+	// Double Canvas - Work to remove second canvas
 	const cvs = document.getElementById("canvas").getContext("2d");
 	const cvs2 = document.getElementById("statusBoard").getContext("2d");
 
@@ -49,6 +45,8 @@
 	let waterPoints = 120;
 	let enemySpawnX = 500;
 	let enemySpawnY = 500;
+	
+	// Rework to create one object with different types rather than carbon copy objects
 	let coin = {
 			x: 450,
 			y: 450
@@ -79,7 +77,7 @@
 		maxY: 580,
 		scoreModifier: 600
 	};
-	// Player Objects
+	// Coordinates, name, color, tail color, score location coords
 	let Player = function(x, y, name, c ,tc, statusX, statusY){
 			this.isAlive = true;
 			this.lives = 10;
@@ -101,6 +99,7 @@
 						
 	};
 
+	
 	let Enemy = function(x,y,c){
 		this.x = x;
 		this.y = y;
@@ -109,9 +108,9 @@
 	
 	
 	// Instantiate Players and Enemies
-	let player1 = new Player(100,400, "Player1", "#80b3ff", "#ccddff", 50, 100);
-	let player2 = new Player(200,400, "Player2", "#00ff00", "#b3ffb3", 50, 250);
-	let player3 = new Player(300,400, "Player3", "#ff9900", "#ffd1b3", 50, 400);
+	let player1 = new Player(100,400, "Bob", "#80b3ff", "#ccddff", 50, 100);
+	let player2 = new Player(200,400, "Carl", "#00ff00", "#b3ffb3", 50, 250);
+	let player3 = new Player(300,400, "Jimmy", "#ff9900", "#ffd1b3", 50, 400);
 	
 	enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red"));
 
