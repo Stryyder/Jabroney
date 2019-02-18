@@ -47,22 +47,16 @@
 	let enemySpawnY = 500;
 	
 	// Rework to create one object with different types rather than carbon copy objects
-	let coin = {
-			x: 450,
-			y: 450
+	let consumableItem = function(x, y, consumableType){
+			this.x = x;
+			this.y = y;
+			this.type = consumableType;
 	};
 	
-	let food = {
-		x: 550,
-		y: 550
-	
-	};
-	
-	let water = {
-		x: 150,
-		y: 150
-	
-	};	
+	// coin 450,450 - food 550 - water 150
+	let coin = new consumableItem (450, 450, "COIN");
+	let food = new consumableItem (550, 550, "FOOD");
+	let water = new consumableItem (150, 150, "WATER");	
 	
 	let gameBoard = {
 		gameSpeed: 40,
@@ -77,9 +71,8 @@
 		maxY: 580,
 		scoreModifier: 600
 	};
-
 	// Coordinates, name, color, tail color, score location coords
-   	let Player = function(x, y, name, c ,tc, statusX, statusY){
+	let Player = function(x, y, name, c ,tc, statusX, statusY){
 			this.isAlive = true;
 			this.lives = 10;
 			this.snake = [{x: x, y: y}]; // Initialize coordinates for snake head (x,y) and for the tail (tx, ty)
@@ -112,7 +105,6 @@
 	let player1 = new Player(100,400, "Bob", "#80b3ff", "#ccddff", 50, 100);
 	let player2 = new Player(200,400, "Carl", "#00ff00", "#b3ffb3", 50, 250);
 	let player3 = new Player(300,400, "Jimmy", "#ff9900", "#ffd1b3", 50, 400);
-
 	
 	enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red"));
 
@@ -124,9 +116,8 @@
 								boundaryCheck(player);
 								drawStatus(player, player.statusX, player.statusY, player.color);
 								drawPlayers(player);
-								updateFood(player);
-								updateCoins(player);
-								updateWater(player);
+								updateConsumableItems(player);
+
 							}
 					}
 					
@@ -472,47 +463,35 @@
 
 		}
 	 
-	function updateCoins(player){
+	function updateConsumableItems(player){
 		cvs.drawImage(imgCoin, coin.x, coin.y); 
+		cvs.drawImage(imgFood, food.x, food.y); 
+		cvs.drawImage(imgWater, water.x, water.y); 
 		
 		if ((player.snake[0].x == coin.x) && (player.snake[0].y == coin.y)){
 			sndCoin.play();
 			player.score += coinPoints;
 			randomizeItem(coin);
 			player.skipPop = true;
-		
 		}
-
-	}
-	
-	function updateFood(player){
-		cvs.drawImage(imgFood, food.x, food.y); 
 		
 		if ((player.snake[0].x == food.x) && (player.snake[0].y == food.y)){
 			sndFood.play();
 			player.score += foodPoints;
-			player.fullness += fullnessBoost;
 			randomizeItem(food);
 			player.skipPop = true;
-			
 		}
-
-	}
-	
-	function updateWater(player){
-		cvs.drawImage(imgWater, water.x, water.y); 
 		
 		if ((player.snake[0].x == water.x) && (player.snake[0].y == water.y)){
 			sndWater.play();
 			player.score += waterPoints;
-			player.hydration += hydrationBoost;
 			randomizeItem(water);
 			player.skipPop = true;
-			
 		}
 
 	}
 	
+
 	
 
 	function gameOver(){
