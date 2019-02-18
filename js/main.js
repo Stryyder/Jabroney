@@ -376,10 +376,7 @@
 				}
 	}
 		 
-	function randomizeItem(itemToRandomize){
-		itemToRandomize.x = (gameBoard.block *(Math.floor(Math.random() * 50) + 1));
-		itemToRandomize.y = (gameBoard.block *(Math.floor(Math.random() * 50) + 1));
-	 }
+
 	 
 	 
 	function enemyAI(){
@@ -467,27 +464,36 @@
 		cvs.drawImage(imgCoin, coin.x, coin.y); 
 		cvs.drawImage(imgFood, food.x, food.y); 
 		cvs.drawImage(imgWater, water.x, water.y); 
+		checkIfEaten(coin);
+		checkIfEaten(food);
+		checkIfEaten(water);
 		
-		if ((player.snake[0].x == coin.x) && (player.snake[0].y == coin.y)){
-			sndCoin.play();
-			player.score += coinPoints;
-			randomizeItem(coin);
-			player.skipPop = true;
+		
+		function checkIfEaten(item){
+			if ((player.snake[0].x == item.x) && (player.snake[0].y == item.y)){
+				switch (item){
+					case coin:
+						player.score += coinPoints;
+						sndCoin.play();
+					break;
+					case food:
+						player.score += foodPoints;
+						sndFood.play();
+					break;
+					case water:
+						player.score += waterPoints;
+						sndWater.play();
+					break;
+					default:
+									
+				}
+				
+					item.x = (gameBoard.block *(Math.floor(Math.random() * 50) + 1));
+					item.y = (gameBoard.block *(Math.floor(Math.random() * 50) + 1));
+					player.skipPop = true;
+			}
 		}
 		
-		if ((player.snake[0].x == food.x) && (player.snake[0].y == food.y)){
-			sndFood.play();
-			player.score += foodPoints;
-			randomizeItem(food);
-			player.skipPop = true;
-		}
-		
-		if ((player.snake[0].x == water.x) && (player.snake[0].y == water.y)){
-			sndWater.play();
-			player.score += waterPoints;
-			randomizeItem(water);
-			player.skipPop = true;
-		}
 
 	}
 	
