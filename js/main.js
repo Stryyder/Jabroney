@@ -68,7 +68,7 @@
 		minY: 10,
 		maxX: 580,
 		maxY: 580,
-		scoreModifier: 600
+		scoreModifier: 300
 	};
 	// Coordinates, name, color, tail color, score location coords
 	let Player = function(x, y, name, c ,tc, statusX, statusY){
@@ -117,17 +117,16 @@
 		
 		
 	function drawGame(){
-			clearBoard();
-			
-					function drawPlayerIfAlive(player){
-							if (player.isAlive){
-								boundaryCheck(player);
-								drawStatus(player, player.statusX, player.statusY, player.color);
-								drawPlayers(player);
-								updateConsumableItems(player);
-
-							}
-					}
+		clearBoard();
+	
+		function drawPlayerIfAlive(player){
+			if (player.isAlive){
+				boundaryCheck(player);
+				drawStatus(player, player.statusX, player.statusY, player.color);
+				drawPlayers(player);
+				updateConsumableItems(player);
+			}
+		}
 					
 				// REDUCE FURTHER?
 				drawPlayerIfAlive(player1);
@@ -136,15 +135,15 @@
 					
 
 				// General Draws
-					updateLevel();
-					drawEnemies();
+				updateLevel();
+				drawEnemies();
 				
 				// Check for Game Over
 				if ((player1.isAlive == false) && (player2.isAlive == false) && (player3.isAlive == false)){
 					gameOver();
 				}
 
-		    }
+	}
 
 	function direction(event){
 		window.addEventListener("keydown", direction);		
@@ -158,9 +157,7 @@
 		
 
 			switch (event.keyCode){
-				
-				
-				
+	
 				case 37:
 					player1.d = "LEFT"; // 37 "LEFT Arrow"
 					e.preventDefault();
@@ -228,11 +225,8 @@
 					if (sndGameOver.volume >= 0.1){sndGameOver.volume -= 0.1;}
 					break;
 		} 
-		
-
 	 }
-	 
-
+	
 	function boundaryCheck(player){
 			if (player.snake[0].x <= gameBoard.minX){player.snake[0].x = gameBoard.maxX-10;}		
 			if (player.snake[0].y <= gameBoard.minY){player.snake[0].y = gameBoard.maxY-10;}		
