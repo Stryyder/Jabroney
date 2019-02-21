@@ -46,17 +46,16 @@
 	let enemySpawnX = 500;
 	let enemySpawnY = 500;
 	
-	// Rework to create one object with different types rather than carbon copy objects
+	
 	let consumableItem = function(x, y, consumableType){
 			this.x = x;
 			this.y = y;
 			this.type = consumableType;
 	};
 	
-	// coin 450,450 - food 550 - water 150
-	let coin = new consumableItem (450, 450, "COIN");
-	let food = new consumableItem (550, 550, "FOOD");
-	let water = new consumableItem (150, 150, "WATER");	
+		let coin = new consumableItem (450, 450, "COIN");
+		let food = new consumableItem (550, 550, "FOOD");
+		let water = new consumableItem (150, 150, "WATER");	
 	
 	let gameBoard = {
 		gameSpeed: 40,
@@ -75,7 +74,7 @@
 	let Player = function(x, y, name, c ,tc, statusX, statusY){
 			this.isAlive = true;
 			this.lives = 10;
-			this.snake = [{x: x, y: y}]; // Initialize coordinates for snake head (x,y) and for the tail (tx, ty)
+			this.snake = [{x: x, y: y}]; 
 			this.snakeX = 0;
 			this.snakeY = 0;
 			this.color = c;
@@ -105,9 +104,18 @@
 	let player1 = new Player(100,400, "Bob", "#80b3ff", "#ccddff", 50, 100);
 	let player2 = new Player(200,400, "Carl", "#00ff00", "#b3ffb3", 50, 250);
 	let player3 = new Player(300,400, "Jimmy", "#ff9900", "#ffd1b3", 50, 400);
-	
-	enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red"));
+		enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red"));
 
+		
+	// PREVENT CANVAS SCROLLING WITH GAMEPLAY
+	window.addEventListener("keydown", function(e) {
+    // space and arrow keys
+    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+    }
+}, false);	
+		
+		
 	function drawGame(){
 			clearBoard();
 			
@@ -148,22 +156,29 @@
 		return; 
 		}
 		
+
 			switch (event.keyCode){
 				
+				
+				
 				case 37:
-					player1.d = "LEFT"; // 65 "A"
+					player1.d = "LEFT"; // 37 "LEFT Arrow"
+					e.preventDefault();
 					break;
 					
 				case 38:
-					player1.d = "UP"; // 87 "W"
+					player1.d = "UP"; // 38 "UP Arrow"
+					e.preventDefault();
 					break;
 					
 				case 39:
-					player1.d = "RIGHT"; // 68 "D"
+					player1.d = "RIGHT"; // 39 "RIGHT Arrow"
+					e.preventDefault();
 					break;
 				
 				case 40:
-					player1.d = "DOWN"; // 83 "S"
+					player1.d = "DOWN"; // 40 "DOWN Arrow"
+					e.preventDefault();
 					break;
 					
 				case 65:
@@ -213,16 +228,16 @@
 					if (sndGameOver.volume >= 0.1){sndGameOver.volume -= 0.1;}
 					break;
 		} 
-
+		
 
 	 }
 	 
 
 	function boundaryCheck(player){
-			if (player.snake[0].x <= gameBoard.minX){player.snake[0].x = gameBoard.maxX-20;}		
-			if (player.snake[0].y <= gameBoard.minY){player.snake[0].y = gameBoard.maxY-20;}		
-			if (player.snake[0].x >= gameBoard.maxX){player.snake[0].x = gameBoard.minX+20;}		
-			if (player.snake[0].y >= gameBoard.maxY){player.snake[0].y = gameBoard.minY+20;}
+			if (player.snake[0].x <= gameBoard.minX){player.snake[0].x = gameBoard.maxX-10;}		
+			if (player.snake[0].y <= gameBoard.minY){player.snake[0].y = gameBoard.maxY-10;}		
+			if (player.snake[0].x >= gameBoard.maxX){player.snake[0].x = gameBoard.minX+10;}		
+			if (player.snake[0].y >= gameBoard.maxY){player.snake[0].y = gameBoard.minY+10;}
 				
 	 }
 	 
@@ -317,7 +332,7 @@
 		 	
 			// Update player food and water levels
 			player.fullness -= starvationRate;
-			player.hydration -= starvationRate;
+			player.hydration -= starvationRate * 2;
 			
 			if (player.fullness <= 0) {	
 				player.starving = true;
@@ -328,6 +343,12 @@
 				player.parched = true;
 				player.hydration = 0;
 			}else { player.parched = false; }
+			
+			
+			// Drain score if parched or starving
+			if ((player.parched) || (player.starving)){
+				player.score -= starvationRate;
+			}
 			
 			
 			// Update Player location
