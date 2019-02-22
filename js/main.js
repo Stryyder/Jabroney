@@ -1,3 +1,4 @@
+	// Jabroney - by Toby
 	
 	// Sound
 	let sndFood = new Audio(); sndFood.src = "sound/sndFood.wav";
@@ -40,6 +41,7 @@
 	let hydrationBoost = 0.1;
 	let skipPop = false;
 	let enemies = [];
+	let gameDifficulty = 99;
 	let coinPoints = 100;
 	let foodPoints = 115;
 	let waterPoints = 120;
@@ -58,7 +60,7 @@
 		let water = new consumableItem (150, 150, "WATER");	
 	
 	let gameBoard = {
-		gameSpeed: 40,
+		gameSpeed: 50, // higher number - higher interval = slower gameplay
 		state: "Title",
 		w: 600,
 		h: 600,
@@ -104,8 +106,10 @@
 	let player1 = new Player(100,400, "Bob", "#80b3ff", "#ccddff", 50, 100);
 	let player2 = new Player(200,400, "Carl", "#00ff00", "#b3ffb3", 50, 250);
 	let player3 = new Player(300,400, "Jimmy", "#ff9900", "#ffd1b3", 50, 400);
+	
+	for (let i=0; i <= numPlayers; i++){
 		enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red"));
-
+	}
 		
 	// PREVENT CANVAS SCROLLING WITH GAMEPLAY
 	window.addEventListener("keydown", function(e) {
@@ -252,10 +256,54 @@
 			if ((player1.score + player2.score + player3.score)>= gameBoard.scoreModifier){
 				gameBoard.scoreModifier += 200;	
 				playerResetOnLevelUp();
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "white"));
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "white"));
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#666699"));
+				let mobColor = "white";
+				
+				switch (true){
 					
+					case level <= 5:
+						mobColor = "red";
+					break;
+					
+					case level > 5 && level <= 10:
+						mobColor = "white";
+					break;
+					
+					case level > 11 && level <= 20:
+						mobColor = "green";
+					break;
+					
+					case level > 21 && level <= 30:
+						mobColor = "yellow";
+					break;
+					
+					case level > 31 && level <= 40:
+						mobColor = "#666699";
+					break;
+					
+					case level > 41 && level <= 50:
+						mobColor = "#EAEAEB";
+					break;
+					
+					case level > 51 && level <= 60:
+						mobColor = "#222";
+					break;
+					
+					case level > 61 && level <= 70:
+						mobColor = "cyan";
+					break;
+					
+					case level > 71:
+						mobColor = "black";
+					break;
+					
+				}
+				
+									
+					for (let i=0; i <= numPlayers * gameDifficulty; i++){
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, mobColor));
+					}
+				
+				
 			}
 		}
 			
