@@ -116,9 +116,8 @@
 	let player2 = new Player(200,400, "Carl", "#00ff00", "#b3ffb3", 50, 250);
 	let player3 = new Player(300,400, "Jimmy", "#ff9900", "#ffd1b3", 50, 400);
 	
-	for (let i=0; i < numPlayers; i++){
-		enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 10, "MOB"));
-	}
+	
+	
 		
 	// PREVENT CANVAS SCROLLING WITH GAMEPLAY
 	window.addEventListener("keydown", function(e) {
@@ -128,7 +127,31 @@
     }
 }, false);	
 		
+	
+	function setupGame(){
+		// Add initial enemies
+		switch(numPlayers){
+			case 1:
+				
+				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 10, "MOB"));
+	
+			break;
+			case 2:
+				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 10, "MOB"));
+				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 10, "MOB"));
+			break;
+			case 3:
+				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 10, "MOB"));
+				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 10, "MOB"));
+				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 10, "MOB"));
+			break;
+			default:
+			
+			break;
+		}
 		
+	}
+	
 	function drawGame(){
 		clearBoard();
 	
@@ -770,6 +793,7 @@
 						player2.isAlive = false; 
 						player3.isAlive = false;
 						numPlayers = 1;
+						setupGame();
 						direction();
 						break;
 					
@@ -777,15 +801,19 @@
 						// 2 players chosen
 						player3.isAlive = false;
 						numPlayers = 2;
+						setupGame();
 						direction();
 					break;
 					
 					case 51:
 						// 3 players chosen
 						numPlayers = 3;
+						setupGame();
 						direction();
 					break;
 				}
+				
+				
 			});
 			          
                            
