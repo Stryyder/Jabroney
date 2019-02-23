@@ -16,6 +16,7 @@
 	let sndSaucer = new Audio(); sndSaucer.src ="sound/sndSaucer.mp3";
 	let sndZap = new Audio(); sndZap.src ="sound/sndZap.wav";
 	let sndGameOver = new Audio(); sndGameOver.src ="sound/sndGameOver.mp3"; sndGameOver.volume = 0.2;
+	let sndLevelUp = new Audio(); sndLevelUp.src="sound/sndLevelUp.wav";
 	// Graphics
 	let imgSaucer = new Image(); imgSaucer.src ="img/imgSaucer.png";
 	let imgFood = new Image(); imgFood.src ="img/imgFood.png";
@@ -36,7 +37,7 @@
 	let teamScore = 0; // total team score for local storage
 	let scoreRate = .1; 
 	let numPlayers = 1;
-	let numPlayersAlive = 1;
+	let whoIsAliveCode = 1;
 	let starvationRate = 0.003;
 	let fullnessBoost = 0.1;
 	let hydrationBoost = 0.1;
@@ -61,7 +62,8 @@
 		let water = new consumableItem (150, 150, "WATER");	
 	
 	let gameBoard = {
-		gameSpeed: 60, // higher number - higher interval = slower gameplay
+		gameSpeed: 50, // higher number - higher interval = slower gameplay
+		projectileSpeed: 6750,
 		state: "Title",
 		w: 600,
 		h: 600,
@@ -71,7 +73,7 @@
 		minY: 10,
 		maxX: 580,
 		maxY: 580,
-		scoreModifier: 200 // 1000 for traditional game play
+		scoreModifier: 1000 // 1000 for traditional game play
 	};
 	// Coordinates, name, color, tail color, score location coords
 	let Player = function(x, y, name, c ,tc, statusX, statusY){
@@ -96,11 +98,17 @@
 	};
 
 	
-	let Enemy = function(x,y,c){
+	let Enemy = function(x,y,c,s,t){
 		this.x = x;
 		this.y = y;
 		this.color = c;
+		this.size = s;
+		this.type=t;
+		this.projectileX=0;
+		this.projectileY=0;
 	};
+	
+
 	
 	
 	// Instantiate Players and Enemies
@@ -109,7 +117,7 @@
 	let player3 = new Player(300,400, "Jimmy", "#ff9900", "#ffd1b3", 50, 400);
 	
 	for (let i=0; i < numPlayers; i++){
-		enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red"));
+		enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 10, "MOB"));
 	}
 		
 	// PREVENT CANVAS SCROLLING WITH GAMEPLAY
@@ -157,6 +165,7 @@
 		sndTitle.play();
 		sndTitle.loop = true;
 		var gameLoop = setInterval(drawGame, gameBoard.gameSpeed);
+		
 		return; 
 		}
 		
@@ -245,12 +254,19 @@
 					player1.hydration = 10;
 					player2.hydration = 10;
 					player3.hydration = 10;
-					sndPickUpBomb.play();
+					
 			
 		}
 	 
 	function updateLevel(){
 			if ((player1.score + player2.score + player3.score)>= gameBoard.scoreModifier){
+				
+					
+					sndLevelUp.play();
+					cvs.fillStyle="blue";
+					cvs.fillRect(0,0,gameBoard.maxX, gameBoard.maxY);
+					enemies = [];
+				
 				gameBoard.scoreModifier += 400;
 				gameDifficulty += 1;
 				playerResetOnLevelUp();
@@ -264,41 +280,78 @@
 					
 					case level > 5 && level <= 10:
 						mobColor = "white";
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "white", 20, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 					break;
 					
 					case level > 11 && level <= 20:
 						mobColor = "green";
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#222222", 30, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 					break;
 					
 					case level > 21 && level <= 30:
 						mobColor = "yellow";
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#111111", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 					break;
 					
 					case level > 31 && level <= 40:
 						mobColor = "#666699";
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#343434", 20, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#434343", 20, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 					break;
 					
 					case level > 41 && level <= 50:
 						mobColor = "#EAEAEB";
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#565656", 30, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#656565", 30, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 					break;
 					
 					case level > 51 && level <= 60:
 						mobColor = "#222";
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						gameDifficulty += 3;
 					break;
 					
 					case level > 61 && level <= 70:
 						mobColor = "cyan";
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						gameDifficulty += 5;
 					break;
 					
 					case level > 71:
 						mobColor = "black";
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 20, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 30, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						gameDifficulty += 10;
 					break;
 					
 				}
 				
 									
 					for (let i=0; i < numPlayers * gameDifficulty; i++){
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, mobColor));
+						enemies.push(new Enemy(enemySpawnX,enemySpawnY, mobColor, 10));
 					}
 				
 				
@@ -337,8 +390,8 @@
 					cvs2.fillText(level, 220, 120);
 					cvs2.fillStyle = "red";
 					cvs2.font = "15px Arial";
-					cvs2.fillText("Mob Strength: " + enemies.length, x, 20);
-					cvs2.fillText("Difficulty: " + gameDifficulty, x, 40);
+					cvs2.fillText("Infection Level: " + enemies.length, x, 20);
+					
 	 
 	 
 				
@@ -436,15 +489,16 @@
 				// Paint the enemies
 				for (let i = 0; i < enemies.length; i++){
 					cvs.fillStyle = enemies[i].color;
-					cvs.fillRect(enemies[i].x, enemies[i].y, gameBoard.block, gameBoard.block);
+					cvs.fillRect(enemies[i].x, enemies[i].y, enemies[i].size, enemies[i].size);
 				}
 	}
 		 
-
+	
 	 
 	 
 	function enemyAI(){
 		// numPlayers
+		
 		let moveAI = 0;
 			// Give each enemy a randomized-ish action but trending towards a player it's chasing 
 			
@@ -460,20 +514,86 @@
 								executeAI(player2, 1, 2);
 							}
 			}else{
-							// 3 player game (missing some situations like when one dies mid game) + this is all really really ugly
-							if (player1.isAlive && (!player2.isAlive) && (!player3.isAlive)){executeAI(player1, 0, 1);}
-							if (player2.isAlive && (!player1.isAlive) && (!player3.isAlive)){executeAI(player2, 0, 1);}
-							if (player3.isAlive && (!player1.isAlive) && (!player2.isAlive)){executeAI(player3, 0, 1);}
-							if (player1.isAlive && player2.isAlive && player3.isAlive){
-								executeAI(player1, 0, 3);
-								executeAI(player2, 1, 3);
-								executeAI(player3, 2, 3);
+							/* 3 player game (missing some situations like when one dies mid game) + this is all really really ugly
+							 WHO'S ALIVE CODES as determined by seeWhoIsAlive()
+							 1:1, 1+2:3, 1+3:4 
+							 2:2, 2+3:5
+							 3:6
+							 all alive: 7
+							 								
+							*/
+							seeWhoIsAlive();
+							switch(whoIsAliveCode){
+								
+								case 1: // Alive: Player 1
+									executeAI(player1, 0, 1);
+								break;
+								case 2: // Alive: Player 2
+									executeAI(player2, 0, 1);
+								break;
+								case 3: // Alive: Player 1 & 2
+									executeAI(player1, 0, 2);
+									executeAI(player2, 1, 2);
+								break;
+								case 4: // Alive: Player 1 & 3
+									executeAI(player1, 0, 2);
+									executeAI(player3, 1, 2);
+								break;
+								case 5: // Alive: Player 2 & 3
+									executeAI(player2, 0, 2);
+									executeAI(player3, 1, 2);
+								break;
+								case 6: // Alive: Player 3
+									executeAI(player3, 0, 1);
+								break;
+								case 7: // All alive
+									executeAI(player1, 0, 3);
+									executeAI(player2, 1, 3);
+									executeAI(player3, 2, 3);
+								break;
+								default:
+								break;
 							}
-			
-		
+							
+							
+							
+							
 				}
 	
-
+	
+		function seeWhoIsAlive(){
+			
+			// player1-based
+			if (player1.isAlive && (!player2.isAlive) && (!player3.isAlive)){ 
+				return whoIsAliveCode = 1;
+			}
+			if (player1.isAlive && player2.isAlive && (!player3.isAlive)){
+				return whoIsAliveCode = 3;
+			}
+			if (player1.isAlive && (!player2.isAlive) && player3.isAlive){
+				return whoIsAliveCode = 4;
+			}
+			
+			// player2-based
+			if (player2.isAlive && (!player1.isAlive) && (!player3.isAlive)){
+				return whoIsAliveCode = 2;
+			}
+			
+			if (player2.isAlive && (!player1.isAlive) && player3.isAlive){
+				return whoIsAliveCode = 5;
+			}
+			
+			// player3-based
+			if (player3.isAlive && (!player1.isAlive) && (!player2.isAlive)){
+				return whoIsAliveCode = 6;
+			}
+			
+			// all alive
+			if (player1.isAlive && player2.isAlive && player3.isAlive){
+				return whoIsAliveCode = 7;
+			}
+					
+		}
 		function executeAI(playerNumber, firstEnemyChosen, enemyCountBy){
 			// Executes repetitious AI but with passed in player number
 
@@ -524,7 +644,10 @@
 	function checkForDamage(enemy, player){
 			if ((enemy.x == player.snake[0].x) && (enemy.y == player.snake[0].y) && (player.isAlive == true)){
 					player.lives -= 1;
-					if (player.lives <=0){player.isAlive = false;}
+					if (player.lives <=0){
+						player.isAlive = false;
+						
+					}
 					player.score -= 100;
 					sndOuch.play();
 					
@@ -533,6 +656,8 @@
 					cvs.fillRect(0,0,gameBoard.maxX, gameBoard.maxY);
 		
 			}
+			
+			
 			
 			/* Make players collide with each other
 			if (player2.isAlive || player3.isAlive){
