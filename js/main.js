@@ -36,12 +36,13 @@
 	let teamScore = 0; // total team score for local storage
 	let scoreRate = .1; 
 	let numPlayers = 1;
+	let numPlayersAlive = 1;
 	let starvationRate = 0.003;
 	let fullnessBoost = 0.1;
 	let hydrationBoost = 0.1;
 	let skipPop = false;
 	let enemies = [];
-	let gameDifficulty = 99;
+	let gameDifficulty = 1;
 	let coinPoints = 100;
 	let foodPoints = 115;
 	let waterPoints = 120;
@@ -60,7 +61,7 @@
 		let water = new consumableItem (150, 150, "WATER");	
 	
 	let gameBoard = {
-		gameSpeed: 50, // higher number - higher interval = slower gameplay
+		gameSpeed: 60, // higher number - higher interval = slower gameplay
 		state: "Title",
 		w: 600,
 		h: 600,
@@ -70,7 +71,7 @@
 		minY: 10,
 		maxX: 580,
 		maxY: 580,
-		scoreModifier: 300
+		scoreModifier: 200 // 1000 for traditional game play
 	};
 	// Coordinates, name, color, tail color, score location coords
 	let Player = function(x, y, name, c ,tc, statusX, statusY){
@@ -107,7 +108,7 @@
 	let player2 = new Player(200,400, "Carl", "#00ff00", "#b3ffb3", 50, 250);
 	let player3 = new Player(300,400, "Jimmy", "#ff9900", "#ffd1b3", 50, 400);
 	
-	for (let i=0; i <= numPlayers; i++){
+	for (let i=0; i < numPlayers; i++){
 		enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red"));
 	}
 		
@@ -164,22 +165,18 @@
 	
 				case 37:
 					player1.d = "LEFT"; // 37 "LEFT Arrow"
-					e.preventDefault();
 					break;
 					
 				case 38:
 					player1.d = "UP"; // 38 "UP Arrow"
-					e.preventDefault();
 					break;
 					
 				case 39:
 					player1.d = "RIGHT"; // 39 "RIGHT Arrow"
-					e.preventDefault();
 					break;
 				
 				case 40:
 					player1.d = "DOWN"; // 40 "DOWN Arrow"
-					e.preventDefault();
 					break;
 					
 				case 65:
@@ -254,7 +251,8 @@
 	 
 	function updateLevel(){
 			if ((player1.score + player2.score + player3.score)>= gameBoard.scoreModifier){
-				gameBoard.scoreModifier += 200;	
+				gameBoard.scoreModifier += 400;
+				gameDifficulty += 1;
 				playerResetOnLevelUp();
 				let mobColor = "white";
 				
@@ -299,7 +297,7 @@
 				}
 				
 									
-					for (let i=0; i <= numPlayers * gameDifficulty; i++){
+					for (let i=0; i < numPlayers * gameDifficulty; i++){
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, mobColor));
 					}
 				
@@ -340,6 +338,7 @@
 					cvs2.fillStyle = "red";
 					cvs2.font = "15px Arial";
 					cvs2.fillText("Mob Strength: " + enemies.length, x, 20);
+					cvs2.fillText("Difficulty: " + gameDifficulty, x, 40);
 	 
 	 
 				
@@ -432,7 +431,9 @@
 	 }
 	 
 	function drawEnemies(){
-				enemyAI();
+				enemyAI(); // move the AI around before painting enemies
+				
+				// Paint the enemies
 				for (let i = 0; i < enemies.length; i++){
 					cvs.fillStyle = enemies[i].color;
 					cvs.fillRect(enemies[i].x, enemies[i].y, gameBoard.block, gameBoard.block);
@@ -443,66 +444,83 @@
 	 
 	 
 	function enemyAI(){
+		// numPlayers
 		let moveAI = 0;
-		
-		
-		for (let i = 0; i < enemies.length; i++){
-		moveAI = Math.floor(Math.random() * 7) + 1;
-				
-				// even numbered enemies chase player1 or player3 X's
-				if (i % 2 == 0){
-					switch (moveAI){
+			// Give each enemy a randomized-ish action but trending towards a player it's chasing 
+			
+			// ONE PLAYER
+		if (numPlayers == 1){executeAI(player1, 0, 1);
+		}else if (numPlayers == 2){
 							
-						case 1:
-							// don't move
-							break;
-						case 2: 
-							if ((enemies[i].x <= player1.snake[0].x) && (player1.isAlive == true)){ enemies[i].x += gameBoard.block;} break;
-						case 3: 
-							if ((enemies[i].x >= player1.snake[0].x) && (player1.isAlive == true)){ enemies[i].x -= gameBoard.block;} break;
-						case 4: 
-							if ((enemies[i].y <= player1.snake[0].y) && (player1.isAlive == true)){ enemies[i].y += gameBoard.block;} break;
-						case 5: 
-							if ((enemies[i].y >= player1.snake[0].y) && (player1.isAlive == true)){ enemies[i].y -= gameBoard.block;} break;
-						case 6:
-							if ((enemies[i].x <= player3.snake[0].x) && (player3.isAlive == true)){ enemies[i].x += gameBoard.block;} break;
-						case 7:
-							if ((enemies[i].x >= player3.snake[0].x) && (player3.isAlive == true)){ enemies[i].x -= gameBoard.block;} break;
+							// 2 player game
+							if (player1.isAlive && (!player2.isAlive)){executeAI(player1, 0, 1);}
+							if (player2.isAlive && (!player1.isAlive)){executeAI(player2, 0, 1);}
+							if (player1.isAlive && player2.isAlive){
+								executeAI(player1, 0, 2);
+								executeAI(player2, 1, 2);
+							}
+			}else{
+							// 3 player game (missing some situations like when one dies mid game) + this is all really really ugly
+							if (player1.isAlive && (!player2.isAlive) && (!player3.isAlive)){executeAI(player1, 0, 1);}
+							if (player2.isAlive && (!player1.isAlive) && (!player3.isAlive)){executeAI(player2, 0, 1);}
+							if (player3.isAlive && (!player1.isAlive) && (!player2.isAlive)){executeAI(player3, 0, 1);}
+							if (player1.isAlive && player2.isAlive && player3.isAlive){
+								executeAI(player1, 0, 3);
+								executeAI(player2, 1, 3);
+								executeAI(player3, 2, 3);
+							}
+			
+		
+				}
+	
+
+		function executeAI(playerNumber, firstEnemyChosen, enemyCountBy){
+			// Executes repetitious AI but with passed in player number
+
+			for (let i = firstEnemyChosen; i < enemies.length; i += enemyCountBy){
+				moveAI = Math.floor(Math.random() * 7) + 1;
+				
+				switch(moveAI){
+					case 1:
+					case 2:
+					case 3:
+						// don't move
+					break;
+					case 4: 
+						if ((enemies[i].x <= playerNumber.snake[0].x) && (playerNumber.isAlive == true)){ 
+							enemies[i].x += gameBoard.block;
+						} 
+						break;
+					case 5: 
+						if ((enemies[i].x >= playerNumber.snake[0].x) && (playerNumber.isAlive == true)){ 
+						enemies[i].x -= gameBoard.block;
+						} 
+						break;
+					case 6: 
+						if ((enemies[i].y <= playerNumber.snake[0].y) && (playerNumber.isAlive == true)){ 
+						enemies[i].y += gameBoard.block;
+						} 
+						break;
+					case 7: 
+						if ((enemies[i].y >= playerNumber.snake[0].y) && (playerNumber.isAlive == true)){ 
+						enemies[i].y -= gameBoard.block;
+						} 
+						break;
 						
 							
 						default:
 						break;
-					}
-
-						
-				}else{
-			// Odd numbered enemies chase player2 or player3 Y's
-						switch (moveAI){
-							
-							case 1:
-								// don't move
-								break;
-							case 2: 
-								if ((enemies[i].x <= player2.snake[0].x) && (player2.isAlive == true)){ enemies[i].x += gameBoard.block;} break;
-							case 3: 
-								if ((enemies[i].x >= player2.snake[0].x) && (player2.isAlive == true)){ enemies[i].x -= gameBoard.block;} break;
-							case 4: 
-								if ((enemies[i].y <= player2.snake[0].y) && (player2.isAlive == true)){ enemies[i].y += gameBoard.block;} break;
-							case 5: 
-								if ((enemies[i].y >= player2.snake[0].y) && (player2.isAlive == true)){ enemies[i].y -= gameBoard.block;} break;
-							case 6:
-								if ((enemies[i].x <= player3.snake[0].y) && (player3.isAlive == true)){ enemies[i].y += gameBoard.block;} break;
-							case 7:
-								if ((enemies[i].x >= player3.snake[0].y) && (player3.isAlive == true)){ enemies[i].y -= gameBoard.block;} break;	
-						
-							default:
-							break;
-						}
-					
-					}	
+				}
+			}	
 		}
-	}
-	 
+
+
+	
+	} 
+	
+	
+	
+	
 	function checkForDamage(enemy, player){
 			if ((enemy.x == player.snake[0].x) && (enemy.y == player.snake[0].y) && (player.isAlive == true)){
 					player.lives -= 1;
