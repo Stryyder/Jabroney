@@ -4,7 +4,7 @@ background-color: #000;
 }
 main {
 	display: block;
-	margin: 0 auto;
+	margin: o auto;
 	text-align: center;
 	width: 100%;
 	padding: 20px;
@@ -13,7 +13,38 @@ canvas {
 	border: 1px dashed #222;
 	
 }
-statusBoard{
+statusBoard {
 	border: 1px solid green;
 	
+}
+
+section {
+	display: block;
+	background-color: #222;
+	width: 100%;
+	padding: 20px;
+}
+
+div {
+	display: block;
+	text-align: justify;
+	background-color: #222;
+	color: #EAEAEB;
+	font-size: 1.5em;
+	line-height: 1.5em;
+	width: 30%;
+	padding: 20px;
+	margin: 0 auto;
+}
+
+li {
+	padding: 5px;
+}
+
+li:nth-child(odd) {
+	background-color: #111;
+}
+
+ol {
+	border: 1px solid #000;
 }

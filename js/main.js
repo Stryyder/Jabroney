@@ -1,8 +1,8 @@
 	// Jabroney - by Toby
 	
 	// Sound
-	let sndFood = new Audio(); sndFood.src = "sound/sndFood.wav";
-	let sndWater = new Audio (); sndWater.src = "sound/sndWater.wav";
+	let sndAPcomplex = new Audio(); sndAPcomplex.src = "sound/sndAPcomplex.wav";
+	let sndPhagocyte = new Audio (); sndPhagocyte.src = "sound/sndPhagocyte.mp3";
 	let sndEat = new Audio(); sndEat.src = "sound/sndEat.wav";
 	let sndEnemyEat = new Audio(); sndEnemyEat.src = "sound/sndEnemyEat.wav";
 	let sndOuch = new Audio(); sndOuch.src = "sound/sndOuch.wav";
@@ -12,19 +12,19 @@
 	let sndPickUpBomb = new Audio(); sndPickUpBomb.src = "sound/sndPickUpBomb.wav";
 	let sndBomb = new Audio(); sndBomb.src = "sound/sndBomb.mp3";
 	let sndTitle = new Audio(); sndTitle.src ="sound/sndTitle.mp3"; sndTitle.volume = 0.2;
-	let sndCoin = new Audio(); sndCoin.src ="sound/sndCoin.wav";
+	let sndBcell = new Audio(); sndBcell.src ="sound/sndBcell.wav";
 	let sndSaucer = new Audio(); sndSaucer.src ="sound/sndSaucer.mp3";
 	let sndZap = new Audio(); sndZap.src ="sound/sndZap.wav";
 	let sndGameOver = new Audio(); sndGameOver.src ="sound/sndGameOver.mp3"; sndGameOver.volume = 0.2;
 	let sndLevelUp = new Audio(); sndLevelUp.src="sound/sndLevelUp.wav";
 	// Graphics
 	let imgSaucer = new Image(); imgSaucer.src ="img/imgSaucer.png";
-	let imgFood = new Image(); imgFood.src ="img/imgFood.png";
-	let imgWater = new Image(); imgWater.src ="img/imgWater.png";
+	let imgAPcomplex = new Image(); imgAPcomplex.src ="img/imgAPcomplex.png";
+	let imgPhagocyte = new Image(); imgPhagocyte.src ="img/imgPhagocyte.png";
 	let imgGrid = new Image(); imgGrid.src = "img/imgGrid.jpg";
 	let imgBomb = new Image(); imgBomb.src ="img/imgBomb.png";
 	let imgTitle = new Image(); imgTitle.src = "img/imgTitle.jpg"; //eCommerce by BoxCat Games (Attribution)
-	let imgCoin = new Image(); imgCoin.src = "img/imgCoin.png";
+	let imgBcell = new Image(); imgBcell.src = "img/imgBcell.png";
 	let imgStatusBoard = new Image(); imgStatusBoard.src = "img/imgStatusBoard.png";
 	
 	// Double Canvas - Work to remove second canvas
@@ -43,10 +43,10 @@
 	let hydrationBoost = 0.1;
 	let skipPop = false;
 	let enemies = [];
-	let gameDifficulty = 1;
-	let coinPoints = 100;
-	let foodPoints = 115;
-	let waterPoints = 120;
+	let gameDifficulty = 15; // Starting point adjusts entire gameplay
+	let BcellPoints = 100;
+	let APcomplexPoints = 115;
+	let PhagocytePoints = 120;
 	let enemySpawnX = 500;
 	let enemySpawnY = 500;
 	
@@ -57,9 +57,9 @@
 			this.type = consumableType;
 	};
 	
-		let coin = new consumableItem (450, 450, "COIN");
-		let food = new consumableItem (550, 550, "FOOD");
-		let water = new consumableItem (150, 150, "WATER");	
+		let Bcell = new consumableItem (450, 450, "BCELL");
+		let APcomplex = new consumableItem (550, 550, "APCOMPLEX");
+		let Phagocyte = new consumableItem (150, 150, "PHAGOCTYE");	
 	
 	let gameBoard = {
 		gameSpeed: 50, // higher number - higher interval = slower gameplay
@@ -86,6 +86,9 @@
 			this.tailColor = tc;
 			this.d = "DOWN";
 			this.score = 0;
+			this.Bcells = 0;
+			this.APcomplexes = 0;
+			this.Phagocytes = 0;
 			this.fullness = 10;
 			this.starving = false;
 			this.hydration = 10;
@@ -400,12 +403,15 @@
 				// Scores and Level		
 				if (player.isAlive){ player.score += scoreRate;	}
 					cvs2.fillStyle = color;
-					cvs2.font = "20px Arial";
+					cvs2.font = "16px Arial";
 					cvs2.fillText(player.name + ": " + parseInt(player.score), x, y);
-					cvs2.fillText("Lives: " + player.lives, x, y + 20);
-					cvs2.fillText("Fullness: " + parseInt(player.fullness), x, y + 40);
-					cvs2.fillText("Hydration: " + parseInt(player.hydration), x, y + 60);
-					cvs2.fillText("Length: " + parseInt(player.snake.length), x, y + 80);
+					cvs2.fillText("Antibiotics: " + player.lives, x, y + 20);
+					cvs2.fillText("B-Cells: " + parseInt(player.Bcells), x, y + 35);
+					cvs2.fillText("AP Complexes: " + parseInt(player.APcomplexes), x, y + 50);
+					cvs2.fillText("Phagoctyes: " + parseInt(player.Phagocytes), x, y + 65);
+					cvs2.fillText("Fullness: " + parseInt(player.fullness), x, y + 80);
+					cvs2.fillText("Hydration: " + parseInt(player.hydration), x, y + 95);
+					cvs2.fillText("Length: " + parseInt(player.snake.length), x, y + 110);
 					cvs2.fillStyle="white";
 					cvs2.fillRect(210, 30, 100, 100);
 					cvs2.fillStyle = "#000033";
@@ -447,7 +453,7 @@
 	function drawPlayers(player){
 		 
 		 	
-			// Update player food and water levels
+			// Update player APcomplex and Phagocyte levels (fullness/thirst attributes atm)
 			player.fullness -= starvationRate;
 			player.hydration -= starvationRate * 2;
 			
@@ -690,28 +696,31 @@
 		}
 	 
 	function updateConsumableItems(player){
-		cvs.drawImage(imgCoin, coin.x, coin.y); 
-		cvs.drawImage(imgFood, food.x, food.y); 
-		cvs.drawImage(imgWater, water.x, water.y); 
-		checkIfEaten(coin);
-		checkIfEaten(food);
-		checkIfEaten(water);
+		cvs.drawImage(imgBcell, Bcell.x, Bcell.y); 
+		cvs.drawImage(imgAPcomplex, APcomplex.x, APcomplex.y); 
+		cvs.drawImage(imgPhagocyte, Phagocyte.x, Phagocyte.y); 
+		checkIfEaten(Bcell);
+		checkIfEaten(APcomplex);
+		checkIfEaten(Phagocyte);
 		
 		
 		function checkIfEaten(item){
 			if ((player.snake[0].x == item.x) && (player.snake[0].y == item.y)){
 				switch (item){
-					case coin:
-						player.score += coinPoints;
-						sndCoin.play();
+					case Bcell:
+						player.score += BcellPoints;
+						sndBcell.play();
+						player.Bcells += 1;
 					break;
-					case food:
-						player.score += foodPoints;
-						sndFood.play();
+					case APcomplex:
+						player.score += APcomplexPoints;
+						sndAPcomplex.play();
+						player.APcomplexes += 1;
 					break;
-					case water:
-						player.score += waterPoints;
-						sndWater.play();
+					case Phagocyte:
+						player.score += PhagocytePoints;
+						sndPhagocyte.play();
+						player.Phagocytes += 1;
 					break;
 					default:
 									
