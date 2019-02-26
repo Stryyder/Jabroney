@@ -43,7 +43,7 @@
 	let hydrationBoost = 0.1;
 	let skipPop = false;
 	let enemies = [];
-	let gameDifficulty = 15; // Starting point adjusts entire gameplay
+	let gameDifficulty = 50; // Starting point adjusts entire gameplay
 	let BcellPoints = 100;
 	let APcomplexPoints = 115;
 	let PhagocytePoints = 120;
@@ -106,9 +106,8 @@
 		this.y = y;
 		this.color = c;
 		this.size = s;
-		this.type=t;
-		this.projectileX=0;
-		this.projectileY=0;
+		this.type = t;
+		this.projectilePosition = [0, 0];
 	};
 	
 
@@ -308,6 +307,7 @@
 						mobColor = "white";
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "white", 20, "FAT"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						
 					break;
 					
 					case level > 11 && level <= 20:
@@ -628,6 +628,10 @@
 
 			for (let i = firstEnemyChosen; i < enemies.length; i += enemyCountBy){
 				moveAI = Math.floor(Math.random() * 7) + 1;
+				if ((level > 5) && (enemies[i].type == "SHOOTER")){
+					sendEnemyFire(enemies[i]);
+				}
+				
 				
 				switch(moveAI){
 					case 1:
@@ -660,10 +664,19 @@
 						default:
 						break;
 				}
-			}	
+			}
+
+						function sendEnemyFire(shooterEnemy){
+							
+							
+							
+							
+						}
+
+			
 		}
 
-
+		
 	
 	} 
 	
@@ -705,6 +718,16 @@
 		
 		
 		function checkIfEaten(item){
+			
+			// Check to see if enemies ate the items
+			for (let i = 0; i < enemies.length; i++){
+				if ((enemies[i].x == item.x) && (enemies[i].y == item.y)){
+					item.x = (gameBoard.block *(Math.floor(Math.random() * 50) + 1));
+					item.y = (gameBoard.block *(Math.floor(Math.random() * 50) + 1));
+				}
+			}
+			
+			// Check to see if players ate the items
 			if ((player.snake[0].x == item.x) && (player.snake[0].y == item.y)){
 				switch (item){
 					case Bcell:
