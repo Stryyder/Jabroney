@@ -25,7 +25,7 @@
 	let imgBomb = new Image(); imgBomb.src ="img/imgBomb.png";
 	let imgTitle = new Image(); imgTitle.src = "img/imgTitle.jpg"; //eCommerce by BoxCat Games (Attribution)
 	let imgBcell = new Image(); imgBcell.src = "img/imgBcell.png";
-	let imgStatusBoard = new Image(); imgStatusBoard.src = "img/imgStatusBoard.png";
+	
 	
 	// Double Canvas - Work to remove second canvas
 	const cvs = document.getElementById("canvas").getContext("2d");
@@ -43,6 +43,7 @@
 	let hydrationBoost = 0.1;
 	let skipPop = false;
 	let enemies = [];
+	let patientStatus = "Excellent Health";
 	let gameDifficulty = 50; // Starting point adjusts entire gameplay
 	let BcellPoints = 100;
 	let APcomplexPoints = 115;
@@ -114,9 +115,9 @@
 	
 	
 	// Instantiate Players and Enemies
-	let player1 = new Player(100,400, "Bob", "#80b3ff", "#ccddff", 50, 100);
-	let player2 = new Player(200,400, "Carl", "#00ff00", "#b3ffb3", 50, 250);
-	let player3 = new Player(300,400, "Jimmy", "#ff9900", "#ffd1b3", 50, 400);
+	let player1 = new Player(100,400, "Bob", "#80b3ff", "#ccddff", 20, 100);
+	let player2 = new Player(200,400, "Carl", "#00ff00", "#b3ffb3", 220, 100);
+	let player3 = new Player(300,400, "Jimmy", "#ff9900", "#ffd1b3", 420, 100);
 	
 	
 	
@@ -391,8 +392,8 @@
 			
 				cvs.clearRect(0, 0, gameBoard.w, gameBoard.h);
 				cvs.drawImage(imgGrid, 10, 10);
-				cvs2.clearRect(0, 0, 300, 600);
-				cvs2.drawImage(imgStatusBoard, 0, 0);
+				cvs2.clearRect(0, 0, 600, 170);
+				
 				
 
 	 }
@@ -402,24 +403,26 @@
 					 
 				// Scores and Level		
 				if (player.isAlive){ player.score += scoreRate;	}
+				
+				
 					cvs2.fillStyle = color;
-					cvs2.font = "16px Arial";
-					cvs2.fillText(player.name + ": " + parseInt(player.score), x, y);
-					cvs2.fillText("Antibiotics: " + player.lives, x, y + 20);
-					cvs2.fillText("B-Cells: " + parseInt(player.Bcells), x, y + 35);
-					cvs2.fillText("AP Complexes: " + parseInt(player.APcomplexes), x, y + 50);
-					cvs2.fillText("Phagoctyes: " + parseInt(player.Phagocytes), x, y + 65);
-					cvs2.fillText("Fullness: " + parseInt(player.fullness), x, y + 80);
-					cvs2.fillText("Hydration: " + parseInt(player.hydration), x, y + 95);
-					cvs2.fillText("Length: " + parseInt(player.snake.length), x, y + 110);
-					cvs2.fillStyle="white";
-					cvs2.fillRect(210, 30, 100, 100);
-					cvs2.fillStyle = "#000033";
-					cvs2.font = "60px Arial";
-					cvs2.fillText(level, 220, 120);
+					cvs2.font = "14px Arial";
+					cvs2.fillText(player.name + ": " + parseInt(player.score), x, 40);
+					cvs2.fillText("Antibiotics: " + player.lives, x, 60);
+					cvs2.fillText("B-Cells: " + parseInt(player.Bcells), x, 80);
+					cvs2.fillText("AP Complexes: " + parseInt(player.APcomplexes), x, 100);
+					cvs2.fillText("Phagoctyes: " + parseInt(player.Phagoctyes), x, 120);
+					cvs2.fillText("F: " + parseInt(player.fullness) + " H: " + parseInt(player.hydration), x, 140); 
+					cvs2.fillText("Length: " + parseInt(player.snake.length), x, 160);
+										
 					cvs2.fillStyle = "red";
-					cvs2.font = "15px Arial";
-					cvs2.fillText("Infection Level: " + enemies.length, x, 20);
+					cvs2.font = "16px Arial";
+					cvs2.fillText("Level: " + level, 75, 20);
+					cvs2.fillStyle = "yellow";
+					cvs2.fillText("Patient Feeling: " + patientStatus, 175, 20);
+					cvs2.fillStyle = "#F781F3";
+					cvs2.fillText("Infection Stage: " + enemies.length, 375, 20);
+					
 					
 	 
 	 
@@ -505,16 +508,19 @@
 				cvs.fillRect(player.snake[i].x, player.snake[i].y, gameBoard.block, gameBoard.block)
 			}
 			
-			// See if we hit any bad guys
+			// See if we hit any bad guys or if bad guys hit food
 			for (let i = 0; i < enemies.length; i ++){
 					checkForDamage(enemies[i], player);
-				}
+				
+				
+			
+			}
 
-	 }
+	}
 	 
 	function drawEnemies(){
 				enemyAI(); // move the AI around before painting enemies
-				
+				projectileAI(); // move the bullets around before painting bullets
 				// Paint the enemies
 				for (let i = 0; i < enemies.length; i++){
 					cvs.fillStyle = enemies[i].color;
@@ -681,7 +687,29 @@
 	} 
 	
 	
-	
+	function projectileAI(){
+		for (let i = 0; i < enemies.length; i ++){
+			switch(enemies[i].type){
+				
+				case "MOB":
+				break;
+				
+				case "FAT":
+				break;
+				
+				case "SHOOTER":
+					enemies[i].projectilePosition = [enemies[i].x, enemies[i].y];
+					console.log(enemies[i].projectilePosition);
+					
+					// checkIfShot();
+					
+				break;
+				
+				default:
+				break;
+			}
+		}
+	}
 	
 	function checkForDamage(enemy, player){
 			if ((enemy.x == player.snake[0].x) && (enemy.y == player.snake[0].y) && (player.isAlive == true)){
@@ -719,14 +747,14 @@
 		
 		function checkIfEaten(item){
 			
-			// Check to see if enemies ate the items
-			for (let i = 0; i < enemies.length; i++){
+			// Move items if enemy hits them + add difficulty
+			for (let i=0; i < enemies.length; i++){
 				if ((enemies[i].x == item.x) && (enemies[i].y == item.y)){
 					item.x = (gameBoard.block *(Math.floor(Math.random() * 50) + 1));
 					item.y = (gameBoard.block *(Math.floor(Math.random() * 50) + 1));
+					gameDifficulty += 10;
 				}
 			}
-			
 			// Check to see if players ate the items
 			if ((player.snake[0].x == item.x) && (player.snake[0].y == item.y)){
 				switch (item){
