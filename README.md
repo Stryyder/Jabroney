@@ -5,4 +5,4 @@ JavaScript Snake-Like Game
 Currently working on streamlining, bug-fixing, etc, before making additions
 
 # Goal
-You are an antibody. You must collect B-Cells, AP Complexes, and Phagocytes to combat the infection. How long can you last before your antibiotics run out?
+You are a computer techie and you've come to clean up your customer's computer. It's probably a mess. There are virii, Trojan horses, bad files, and memory leaks to take care of. Lucky for you, you're a master tech expert. Clean up the files before the virus eats the computer in half.
