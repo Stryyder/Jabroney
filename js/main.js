@@ -4,7 +4,6 @@
 	let sndTROJANS = new Audio(); sndTROJANS.src = "sound/sndTROJANS.wav";
 	let sndMEMORYLEAKS = new Audio (); sndMEMORYLEAKS.src = "sound/sndMEMORYLEAKS.wav";
 	let sndEat = new Audio(); sndEat.src = "sound/sndEat.wav";
-	let sndEnemyEat = new Audio(); sndEnemyEat.src = "sound/sndEnemyEat.wav";
 	let sndOuch = new Audio(); sndOuch.src = "sound/sndOuch.wav";
 	let sndHungry = new Audio(); sndHungry.src = "sound/sndHungry.wav";
 	let sndThirsty = new Audio(); sndThirsty.src = "sound/sndThirsty.wav";
@@ -17,6 +16,7 @@
 	let sndZap = new Audio(); sndZap.src ="sound/sndZap.wav";
 	let sndGameOver = new Audio(); sndGameOver.src ="sound/sndGameOver.mp3"; sndGameOver.volume = 0.2;
 	let sndLevelUp = new Audio(); sndLevelUp.src="sound/sndLevelUp.wav";
+	let sndEnemyPickup = new Audio(); sndEnemyPickup.src="sound/sndEnemyPickup.wav";
 	// Graphics
 	let imgSaucer = new Image(); imgSaucer.src ="img/imgSaucer.png";
 	let imgTROJANS = new Image(); imgTROJANS.src ="img/imgTROJANS.png";
@@ -421,7 +421,7 @@
 					cvs2.fillStyle = color;
 					cvs2.font = "14px Arial";
 					cvs2.fillText(player.name + ": " + parseInt(player.score), x, 40);
-					cvs2.fillText("Antibiotics: " + player.lives, x, 60);
+					cvs2.fillText("Nerves: " + player.lives, x, 60);
 					cvs2.fillText("Bad Files: " + parseInt(player.BADFILES), x, 80);
 					cvs2.fillText("Trojans: " + parseInt(player.TROJANS), x, 100);
 					cvs2.fillText("Memory Leaks: " + parseInt(player.MEMORYLEAKS), x, 120);
@@ -766,6 +766,7 @@
 					item.x = (gameBoard.block *(Math.floor(Math.random() * 50) + 1));
 					item.y = (gameBoard.block *(Math.floor(Math.random() * 50) + 1));
 					gameDifficulty += 10;
+					sndEnemyPickup.play();
 				}
 			}
 			// Check to see if players ate the items
