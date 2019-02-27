@@ -43,7 +43,7 @@
 	let hydrationBoost = 0.1;
 	let skipPop = false;
 	let enemies = [];
-	let patientStatus = "Excellent Health";
+	let patientStatus = "Perfectly healthy";
 	let gameDifficulty = 50; // Starting point adjusts entire gameplay
 	let BcellPoints = 100;
 	let APcomplexPoints = 115;
@@ -298,6 +298,10 @@
 				playerResetOnLevelUp();
 				let mobColor = "white";
 				
+				
+				
+				
+				
 				switch (true){
 					
 					case level <= 5:
@@ -308,6 +312,7 @@
 						mobColor = "white";
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "white", 20, "FAT"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						patientStatus = "a little sick";
 						
 					break;
 					
@@ -315,12 +320,14 @@
 						mobColor = "green";
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#222222", 30, "FAT"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						patientStatus = "like puking";
 					break;
 					
 					case level > 21 && level <= 30:
 						mobColor = "yellow";
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#111111", 40, "FAT"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						patientStatus = "panicky";
 					break;
 					
 					case level > 31 && level <= 40:
@@ -329,6 +336,7 @@
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#434343", 20, "FAT"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						patientStatus = "insane";
 					break;
 					
 					case level > 41 && level <= 50:
@@ -337,6 +345,7 @@
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#656565", 30, "FAT"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						patientStatus = "febrile";
 					break;
 					
 					case level > 51 && level <= 60:
@@ -345,6 +354,7 @@
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						patientStatus = "suicidal";
 						gameDifficulty += 3;
 					break;
 					
@@ -358,6 +368,7 @@
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						patientStatus = "like hot garbage";
 						gameDifficulty += 5;
 					break;
 					
@@ -371,6 +382,7 @@
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						patientStatus = "like writing a will";
 						gameDifficulty += 10;
 					break;
 					
@@ -421,7 +433,7 @@
 					cvs2.fillStyle = "yellow";
 					cvs2.fillText("Patient Feeling: " + patientStatus, 175, 20);
 					cvs2.fillStyle = "#F781F3";
-					cvs2.fillText("Infection Stage: " + enemies.length, 375, 20);
+					cvs2.fillText("Infection Stage: " + enemies.length, 425, 20);
 					
 					
 	 
