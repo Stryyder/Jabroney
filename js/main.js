@@ -1,8 +1,8 @@
 	// Jabroney - by Toby
 	
 	// Sound
-	let sndAPcomplex = new Audio(); sndAPcomplex.src = "sound/sndAPcomplex.wav";
-	let sndPhagocyte = new Audio (); sndPhagocyte.src = "sound/sndPhagocyte.mp3";
+	let sndTROJANS = new Audio(); sndTROJANS.src = "sound/sndTROJANS.wav";
+	let sndMEMORYLEAKS = new Audio (); sndMEMORYLEAKS.src = "sound/sndMEMORYLEAKS.wav";
 	let sndEat = new Audio(); sndEat.src = "sound/sndEat.wav";
 	let sndEnemyEat = new Audio(); sndEnemyEat.src = "sound/sndEnemyEat.wav";
 	let sndOuch = new Audio(); sndOuch.src = "sound/sndOuch.wav";
@@ -12,19 +12,19 @@
 	let sndPickUpBomb = new Audio(); sndPickUpBomb.src = "sound/sndPickUpBomb.wav";
 	let sndBomb = new Audio(); sndBomb.src = "sound/sndBomb.mp3";
 	let sndTitle = new Audio(); sndTitle.src ="sound/sndTitle.mp3"; sndTitle.volume = 0.2;
-	let sndBcell = new Audio(); sndBcell.src ="sound/sndBcell.wav";
+	let sndBADFILES = new Audio(); sndBADFILES.src ="sound/sndBADFILES.wav";
 	let sndSaucer = new Audio(); sndSaucer.src ="sound/sndSaucer.mp3";
 	let sndZap = new Audio(); sndZap.src ="sound/sndZap.wav";
 	let sndGameOver = new Audio(); sndGameOver.src ="sound/sndGameOver.mp3"; sndGameOver.volume = 0.2;
 	let sndLevelUp = new Audio(); sndLevelUp.src="sound/sndLevelUp.wav";
 	// Graphics
 	let imgSaucer = new Image(); imgSaucer.src ="img/imgSaucer.png";
-	let imgAPcomplex = new Image(); imgAPcomplex.src ="img/imgAPcomplex.png";
-	let imgPhagocyte = new Image(); imgPhagocyte.src ="img/imgPhagocyte.png";
+	let imgTROJANS = new Image(); imgTROJANS.src ="img/imgTROJANS.png";
+	let imgMEMORYLEAKS = new Image(); imgMEMORYLEAKS.src ="img/imgMEMORYLEAKS.png";
 	let imgGrid = new Image(); imgGrid.src = "img/imgGrid.jpg";
 	let imgBomb = new Image(); imgBomb.src ="img/imgBomb.png";
 	let imgTitle = new Image(); imgTitle.src = "img/imgTitle.jpg"; //eCommerce by BoxCat Games (Attribution)
-	let imgBcell = new Image(); imgBcell.src = "img/imgBcell.png";
+	let imgBADFILES = new Image(); imgBADFILES.src = "img/imgBADFILES.png";
 	
 	
 	// Double Canvas - Work to remove second canvas
@@ -43,11 +43,12 @@
 	let hydrationBoost = 0.1;
 	let skipPop = false;
 	let enemies = [];
-	let patientStatus = "Perfectly healthy";
+	let obstacles = [];
+	let customerStatus = "Perfectly healthy";
 	let gameDifficulty = 50; // Starting point adjusts entire gameplay
-	let BcellPoints = 100;
-	let APcomplexPoints = 115;
-	let PhagocytePoints = 120;
+	let BADFILESPoints = 100;
+	let TROJANSPoints = 115;
+	let MEMORYLEAKSPoints = 120;
 	let enemySpawnX = 500;
 	let enemySpawnY = 500;
 	
@@ -58,9 +59,9 @@
 			this.type = consumableType;
 	};
 	
-		let Bcell = new consumableItem (450, 450, "BCELL");
-		let APcomplex = new consumableItem (550, 550, "APCOMPLEX");
-		let Phagocyte = new consumableItem (150, 150, "PHAGOCTYE");	
+		let BADFILES = new consumableItem (450, 450, "BADFILES");
+		let TROJANS = new consumableItem (550, 550, "TROJANS");
+		let MEMORYLEAKS = new consumableItem (150, 150, "MEMORYLEAKS");	
 	
 	let gameBoard = {
 		gameSpeed: 50, // higher number - higher interval = slower gameplay
@@ -87,9 +88,9 @@
 			this.tailColor = tc;
 			this.d = "DOWN";
 			this.score = 0;
-			this.Bcells = 0;
-			this.APcomplexes = 0;
-			this.Phagocytes = 0;
+			this.BADFILES = 0; 
+			this.TROJANS = 0;
+			this.MEMORYLEAKS = 0;
 			this.fullness = 10;
 			this.starving = false;
 			this.hydration = 10;
@@ -312,7 +313,7 @@
 						mobColor = "white";
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "white", 20, "FAT"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						patientStatus = "a little sick";
+						customerStatus = "a little sick";
 						
 					break;
 					
@@ -320,14 +321,14 @@
 						mobColor = "green";
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#222222", 30, "FAT"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						patientStatus = "like puking";
+						customerStatus = "like puking";
 					break;
 					
 					case level > 21 && level <= 30:
 						mobColor = "yellow";
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#111111", 40, "FAT"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						patientStatus = "panicky";
+						customerStatus = "panicky";
 					break;
 					
 					case level > 31 && level <= 40:
@@ -336,7 +337,7 @@
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#434343", 20, "FAT"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						patientStatus = "insane";
+						customerStatus = "insane";
 					break;
 					
 					case level > 41 && level <= 50:
@@ -345,7 +346,7 @@
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#656565", 30, "FAT"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						patientStatus = "febrile";
+						customerStatus = "febrile";
 					break;
 					
 					case level > 51 && level <= 60:
@@ -354,7 +355,7 @@
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						patientStatus = "suicidal";
+						customerStatus = "suicidal";
 						gameDifficulty += 3;
 					break;
 					
@@ -368,7 +369,7 @@
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						patientStatus = "like hot garbage";
+						customerStatus = "like hot garbage";
 						gameDifficulty += 5;
 					break;
 					
@@ -382,7 +383,7 @@
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						patientStatus = "like writing a will";
+						customerStatus = "like writing a will";
 						gameDifficulty += 10;
 					break;
 					
@@ -421,9 +422,9 @@
 					cvs2.font = "14px Arial";
 					cvs2.fillText(player.name + ": " + parseInt(player.score), x, 40);
 					cvs2.fillText("Antibiotics: " + player.lives, x, 60);
-					cvs2.fillText("B-Cells: " + parseInt(player.Bcells), x, 80);
-					cvs2.fillText("AP Complexes: " + parseInt(player.APcomplexes), x, 100);
-					cvs2.fillText("Phagoctyes: " + parseInt(player.Phagoctyes), x, 120);
+					cvs2.fillText("Bad Files: " + parseInt(player.BADFILES), x, 80);
+					cvs2.fillText("Trojans: " + parseInt(player.TROJANS), x, 100);
+					cvs2.fillText("Memory Leaks: " + parseInt(player.MEMORYLEAKS), x, 120);
 					cvs2.fillText("F: " + parseInt(player.fullness) + " H: " + parseInt(player.hydration), x, 140); 
 					cvs2.fillText("Length: " + parseInt(player.snake.length), x, 160);
 										
@@ -431,7 +432,7 @@
 					cvs2.font = "16px Arial";
 					cvs2.fillText("Level: " + level, 75, 20);
 					cvs2.fillStyle = "yellow";
-					cvs2.fillText("Patient Feeling: " + patientStatus, 175, 20);
+					cvs2.fillText("Customer: " + customerStatus, 175, 20);
 					cvs2.fillStyle = "#F781F3";
 					cvs2.fillText("Infection Stage: " + enemies.length, 425, 20);
 					
@@ -468,7 +469,7 @@
 	function drawPlayers(player){
 		 
 		 	
-			// Update player APcomplex and Phagocyte levels (fullness/thirst attributes atm)
+			// Update player Trojans and Memory Leaks levels (fullness/thirst attributes atm)
 			player.fullness -= starvationRate;
 			player.hydration -= starvationRate * 2;
 			
@@ -749,12 +750,12 @@
 		}
 	 
 	function updateConsumableItems(player){
-		cvs.drawImage(imgBcell, Bcell.x, Bcell.y); 
-		cvs.drawImage(imgAPcomplex, APcomplex.x, APcomplex.y); 
-		cvs.drawImage(imgPhagocyte, Phagocyte.x, Phagocyte.y); 
-		checkIfEaten(Bcell);
-		checkIfEaten(APcomplex);
-		checkIfEaten(Phagocyte);
+		cvs.drawImage(imgBADFILES, BADFILES.x, BADFILES.y); 
+		cvs.drawImage(imgTROJANS, TROJANS.x, TROJANS.y); 
+		cvs.drawImage(imgMEMORYLEAKS, MEMORYLEAKS.x, MEMORYLEAKS.y); 
+		checkIfEaten(BADFILES);
+		checkIfEaten(TROJANS);
+		checkIfEaten(MEMORYLEAKS);
 		
 		
 		function checkIfEaten(item){
@@ -770,20 +771,23 @@
 			// Check to see if players ate the items
 			if ((player.snake[0].x == item.x) && (player.snake[0].y == item.y)){
 				switch (item){
-					case Bcell:
-						player.score += BcellPoints;
-						sndBcell.play();
-						player.Bcells += 1;
+					case BADFILES:
+						player.score += BADFILESPoints;
+						sndBADFILES.play();
+						player.BADFILES += 1;
+						if (enemies.length > 1 ){enemies.pop();}
 					break;
-					case APcomplex:
-						player.score += APcomplexPoints;
-						sndAPcomplex.play();
-						player.APcomplexes += 1;
+					case TROJANS:
+						player.score += TROJANSPoints;
+						sndTROJANS.play();
+						player.TROJANS += 1;
+						if (enemies.length > 1 ){enemies.pop();}
 					break;
-					case Phagocyte:
-						player.score += PhagocytePoints;
-						sndPhagocyte.play();
-						player.Phagocytes += 1;
+					case MEMORYLEAKS:
+						player.score += MEMORYLEAKSPoints;
+						sndMEMORYLEAKS.play();
+						player.MEMORYLEAKS += 1;
+						if (enemies.length > 1 ){enemies.pop();}
 					break;
 					default:
 									
