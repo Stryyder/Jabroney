@@ -45,10 +45,10 @@
 	let enemies = [];
 	let obstacles = [];
 	let customerStatus = "Perfectly healthy";
-	let gameDifficulty = 50; // Starting point adjusts entire gameplay
-	let BADFILESPoints = 100;
-	let TROJANSPoints = 115;
-	let MEMORYLEAKSPoints = 120;
+	let gameDifficulty = 10; // Starting point adjusts entire gameplay
+	let BADFILESPoints = 50;
+	let TROJANSPoints = 55;
+	let MEMORYLEAKSPoints = 70;
 	let enemySpawnX = 500;
 	let enemySpawnY = 500;
 	
@@ -271,6 +271,13 @@
 			if (player.snake[0].y >= gameBoard.maxY){player.snake[0].y = gameBoard.minY+10;}
 				
 	 }
+	 function enemyBoundaryCheck(enemy){
+			if (enemy.x <= gameBoard.minX){enemy.x = gameBoard.maxX-10;}		
+			if (enemy.y <= gameBoard.minY){enemy.y = gameBoard.maxY-10;}		
+			if (enemy.x >= gameBoard.maxX){enemy.x = gameBoard.minX+10;}		
+			if (enemy.y >= gameBoard.maxY){enemy.y = gameBoard.minY+10;}
+				
+	 }
 	 
 	function playerResetOnLevelUp(){
 					level += 1;
@@ -321,7 +328,7 @@
 						mobColor = "green";
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#222222", 30, "FAT"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						customerStatus = "like puking";
+						customerStatus = "puking";
 					break;
 					
 					case level > 21 && level <= 30:
@@ -369,7 +376,7 @@
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						customerStatus = "like hot garbage";
+						customerStatus = "hot garbage";
 						gameDifficulty += 5;
 					break;
 					
@@ -383,7 +390,7 @@
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						customerStatus = "like writing a will";
+						customerStatus = "writing a will";
 						gameDifficulty += 10;
 					break;
 					
@@ -533,9 +540,11 @@
 	 
 	function drawEnemies(){
 				enemyAI(); // move the AI around before painting enemies
+				
 				projectileAI(); // move the bullets around before painting bullets
 				// Paint the enemies
 				for (let i = 0; i < enemies.length; i++){
+					enemyBoundaryCheck(enemies[i]);
 					cvs.fillStyle = enemies[i].color;
 					cvs.fillRect(enemies[i].x, enemies[i].y, enemies[i].size, enemies[i].size);
 				}
@@ -562,7 +571,7 @@
 								executeAI(player2, 1, 2);
 							}
 			}else{
-							/* 3 player game (missing some situations like when one dies mid game) + this is all really really ugly
+							/* 3 player game 
 							 WHO'S ALIVE CODES as determined by seeWhoIsAlive()
 							 1:1, 1+2:3, 1+3:4 
 							 2:2, 2+3:5
@@ -646,7 +655,8 @@
 			// Executes repetitious AI but with passed in player number
 
 			for (let i = firstEnemyChosen; i < enemies.length; i += enemyCountBy){
-				moveAI = Math.floor(Math.random() * 7) + 1;
+				moveAI = Math.floor(Math.random() * 15) + 1;
+				
 				if ((level > 5) && (enemies[i].type == "SHOOTER")){
 					sendEnemyFire(enemies[i]);
 				}
@@ -658,28 +668,45 @@
 					case 3:
 						// don't move
 					break;
+					case 12: // Extra cases double the chance of enemy following player
 					case 4: 
 						if ((enemies[i].x <= playerNumber.snake[0].x) && (playerNumber.isAlive == true)){ 
 							enemies[i].x += gameBoard.block;
 						} 
 						break;
+					case 13:
 					case 5: 
 						if ((enemies[i].x >= playerNumber.snake[0].x) && (playerNumber.isAlive == true)){ 
 						enemies[i].x -= gameBoard.block;
 						} 
 						break;
+					case 14:
 					case 6: 
 						if ((enemies[i].y <= playerNumber.snake[0].y) && (playerNumber.isAlive == true)){ 
 						enemies[i].y += gameBoard.block;
 						} 
 						break;
-					case 7: 
+					case 15:
+					case 7:
 						if ((enemies[i].y >= playerNumber.snake[0].y) && (playerNumber.isAlive == true)){ 
 						enemies[i].y -= gameBoard.block;
 						} 
 						break;
 						
-							
+						// These cases cause enemies to wander a tiny bit
+					case 8:
+						enemies[i].x += gameBoard.block;
+						break;
+					case 9:
+						enemies[i].x -= gameBoard.block;
+						break;	
+					case 10:
+						enemies[i].y += gameBoard.block;
+						break;
+					case 11:
+						enemies[i].y -= gameBoard.block;
+						break;	
+					
 						default:
 						break;
 				}
@@ -734,7 +761,7 @@
 					player.score -= 100;
 					sndOuch.play();
 					
-					player.snake[0].x = 20; player.snake[0].y = 20;
+					player.snake[0].x = 20; player.snake[0].y = 20; //20 is player start coordinates 20, 20
 					cvs.fillStyle="red";
 					cvs.fillRect(0,0,gameBoard.maxX, gameBoard.maxY);
 		
@@ -742,11 +769,7 @@
 			
 			
 			
-			/* Make players collide with each other
-			if (player2.isAlive || player3.isAlive){
-				
-			}*/
-
+			
 		}
 	 
 	function updateConsumableItems(player){
@@ -763,9 +786,10 @@
 			// Move items if enemy hits them + add difficulty
 			for (let i=0; i < enemies.length; i++){
 				if ((enemies[i].x == item.x) && (enemies[i].y == item.y)){
-					item.x = (gameBoard.block *(Math.floor(Math.random() * 50) + 1));
-					item.y = (gameBoard.block *(Math.floor(Math.random() * 50) + 1));
-					gameDifficulty += 10;
+					item.x = (gameBoard.block * (Math.floor(Math.random() * 50) + 1));
+					item.y = (gameBoard.block * (Math.floor(Math.random() * 50) + 1));
+					if (item.x <= 10){item.x = 20;} // prevent stuff from spawning in the walls for some reason
+					if (item.y <= 10){item.y = 20;}
 					sndEnemyPickup.play();
 				}
 			}
@@ -777,25 +801,36 @@
 						sndBADFILES.play();
 						player.BADFILES += 1;
 						if (enemies.length > 1 ){enemies.pop();}
+						cvs.font = "36px Arial";
+						cvs.fillStyle = player.color;
+						cvs.fillText("+ " + BADFILESPoints, player.snake[0].x, player.snake[0].y);
 					break;
 					case TROJANS:
 						player.score += TROJANSPoints;
 						sndTROJANS.play();
 						player.TROJANS += 1;
 						if (enemies.length > 1 ){enemies.pop();}
+						cvs.font = "36px Arial";
+						cvs.fillStyle = player.color;
+						cvs.fillText("+ " + TROJANSPoints, player.snake[0].x, player.snake[0].y);
 					break;
 					case MEMORYLEAKS:
 						player.score += MEMORYLEAKSPoints;
 						sndMEMORYLEAKS.play();
 						player.MEMORYLEAKS += 1;
 						if (enemies.length > 1 ){enemies.pop();}
+						cvs.font = "36px Arial";
+						cvs.fillStyle = player.color;
+						cvs.fillText("+ " + MEMORYLEAKSPoints, player.snake[0].x, player.snake[0].y);
 					break;
 					default:
 									
 				}
 				
-					item.x = (gameBoard.block *(Math.floor(Math.random() * 50) + 1));
-					item.y = (gameBoard.block *(Math.floor(Math.random() * 50) + 1));
+					item.x = (gameBoard.block * (Math.floor(Math.random() * 50) + 1));
+					item.y = (gameBoard.block * (Math.floor(Math.random() * 50) + 1));
+					if (item.x <= 10){item.x = 20;} // prevent stuff from spawning in the walls for some reason
+					if (item.y <= 10){item.y = 20;}
 					player.skipPop = true;
 			}
 		}
@@ -814,17 +849,17 @@
 		
 		cvs2.fillStyle = "#ff3300";
 		cvs2.font = "30px Arial";
-		cvs2.fillText("GAME OVER!", 10, 100);
+		cvs2.fillText("GAME OVER!", 10, 10);
 		
 		cvs2.fillStyle = "white";
 		cvs2.font = "15px Arial";
-		cvs2.fillText(player1.name + " scored: " + parseInt(player1.score), 10, 120);
-		cvs2.fillText(player2.name + " scored: " + parseInt(player2.score), 10, 140);
-		cvs2.fillText(player3.name + " scored: " + parseInt(player3.score), 10, 160);
+		cvs2.fillText(player1.name + " scored: " + parseInt(player1.score), 10, 40);
+		cvs2.fillText(player2.name + " scored: " + parseInt(player2.score), 10, 60);
+		cvs2.fillText(player3.name + " scored: " + parseInt(player3.score), 10, 80);
 		
 		cvs2.fillStyle = "#ffff00";
 		cvs2.font = "15px Arial";
-		cvs2.fillText("Team Score: " + parseInt(player3.score + player2.score + player1.score), 10, 180);
+		cvs2.fillText("Team Score: " + parseInt(player3.score + player2.score + player1.score), 10, 100);
 		
 		// Keep high score records on local storage
 			highScore = parseInt(localStorage.getItem("High Score"));
