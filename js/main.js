@@ -44,7 +44,7 @@
 	let skipPop = false;
 	let enemies = [];
 	let obstacles = [];
-	let customerStatus = "Perfectly healthy";
+	let customerStatus = "Perfectly happy";
 	let gameDifficulty = 10; // Starting point adjusts entire gameplay
 	let BADFILESPoints = 50;
 	let TROJANSPoints = 55;
@@ -271,7 +271,7 @@
 			if (player.snake[0].y >= gameBoard.maxY){player.snake[0].y = gameBoard.minY+10;}
 				
 	 }
-	 function enemyBoundaryCheck(enemy){
+	function enemyBoundaryCheck(enemy){
 			if (enemy.x <= gameBoard.minX){enemy.x = gameBoard.maxX-10;}		
 			if (enemy.y <= gameBoard.minY){enemy.y = gameBoard.maxY-10;}		
 			if (enemy.x >= gameBoard.maxX){enemy.x = gameBoard.minX+10;}		
@@ -849,13 +849,13 @@
 		
 		cvs2.fillStyle = "#ff3300";
 		cvs2.font = "30px Arial";
-		cvs2.fillText("GAME OVER!", 10, 10);
+		cvs2.fillText("GAME OVER!", 10, 30);
 		
 		cvs2.fillStyle = "white";
 		cvs2.font = "15px Arial";
-		cvs2.fillText(player1.name + " scored: " + parseInt(player1.score), 10, 40);
-		cvs2.fillText(player2.name + " scored: " + parseInt(player2.score), 10, 60);
-		cvs2.fillText(player3.name + " scored: " + parseInt(player3.score), 10, 80);
+		cvs2.fillText(player1.name + " scored: " + parseInt(player1.score), 10, 50);
+		cvs2.fillText(player2.name + " scored: " + parseInt(player2.score), 10, 70);
+		cvs2.fillText(player3.name + " scored: " + parseInt(player3.score), 10, 90);
 		
 		cvs2.fillStyle = "#ffff00";
 		cvs2.font = "15px Arial";
