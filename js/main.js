@@ -27,9 +27,9 @@
 	let imgBADFILES = new Image(); imgBADFILES.src = "img/imgBADFILES.png";
 	
 	
-	// Double Canvas - Work to remove second canvas
+	// Drawing Board
 	const cvs = document.getElementById("canvas").getContext("2d");
-	const cvs2 = document.getElementById("statusBoard").getContext("2d");
+	
 
 	// Game Globals
 	let level = 1;
@@ -43,7 +43,6 @@
 	let hydrationBoost = 0.1;
 	let skipPop = false;
 	let enemies = [];
-	let obstacles = [];
 	let customerStatus = "Perfectly happy";
 	let gameDifficulty = 10; // Starting point adjusts entire gameplay
 	let BADFILESPoints = 50;
@@ -68,13 +67,13 @@
 		projectileSpeed: 6750,
 		state: "Title",
 		w: 600,
-		h: 600,
+		h: 770,
 		block: 10,
 		blockM: 4,
-		minX: 10,
-		minY: 10,
-		maxX: 580,
-		maxY: 580,
+		minX: 0,
+		minY: 0,
+		maxX: 570,
+		maxY: 570,
 		scoreModifier: 1000 // 1000 for traditional game play
 	};
 	// Coordinates, name, color, tail color, score location coords
@@ -411,8 +410,8 @@
 	function clearBoard(){
 			
 				cvs.clearRect(0, 0, gameBoard.w, gameBoard.h);
-				cvs.drawImage(imgGrid, 10, 10);
-				cvs2.clearRect(0, 0, 600, 170);
+				cvs.drawImage(imgGrid, 0, 0);
+				
 				
 				
 
@@ -425,23 +424,23 @@
 				if (player.isAlive){ player.score += scoreRate;	}
 				
 				
-					cvs2.fillStyle = color;
-					cvs2.font = "14px Arial";
-					cvs2.fillText(player.name + ": " + parseInt(player.score), x, 40);
-					cvs2.fillText("Nerves: " + player.lives, x, 60);
-					cvs2.fillText("Bad Files: " + parseInt(player.BADFILES), x, 80);
-					cvs2.fillText("Trojans: " + parseInt(player.TROJANS), x, 100);
-					cvs2.fillText("Memory Leaks: " + parseInt(player.MEMORYLEAKS), x, 120);
-					cvs2.fillText("F: " + parseInt(player.fullness) + " H: " + parseInt(player.hydration), x, 140); 
-					cvs2.fillText("Length: " + parseInt(player.snake.length), x, 160);
+					cvs.fillStyle = color;
+					cvs.font = "14px Arial";
+					cvs.fillText(player.name + ": " + parseInt(player.score), x, 640);
+					cvs.fillText("Nerves: " + player.lives, x, 660);
+					cvs.fillText("Bad Files: " + parseInt(player.BADFILES), x, 680);
+					cvs.fillText("Trojans: " + parseInt(player.TROJANS), x, 700);
+					cvs.fillText("Memory Leaks: " + parseInt(player.MEMORYLEAKS), x, 720);
+					cvs.fillText("F: " + parseInt(player.fullness) + " H: " + parseInt(player.hydration), x, 740); 
+					cvs.fillText("Length: " + parseInt(player.snake.length), x, 760);
 										
-					cvs2.fillStyle = "red";
-					cvs2.font = "16px Arial";
-					cvs2.fillText("Level: " + level, 75, 20);
-					cvs2.fillStyle = "yellow";
-					cvs2.fillText("Customer: " + customerStatus, 175, 20);
-					cvs2.fillStyle = "#F781F3";
-					cvs2.fillText("Infection Stage: " + enemies.length, 425, 20);
+					cvs.fillStyle = "red";
+					cvs.font = "16px Arial";
+					cvs.fillText("Level: " + level, 100, 610);
+					cvs.fillStyle = "yellow";
+					cvs.fillText("Customer: " + customerStatus, 200, 610);
+					cvs.fillStyle = "#F781F3";
+					cvs.fillText("Infection Stage: " + enemies.length, 425, 610);
 					
 					
 	 
@@ -788,8 +787,7 @@
 				if ((enemies[i].x == item.x) && (enemies[i].y == item.y)){
 					item.x = (gameBoard.block * (Math.floor(Math.random() * 50) + 1));
 					item.y = (gameBoard.block * (Math.floor(Math.random() * 50) + 1));
-					if (item.x <= 10){item.x = 20;} // prevent stuff from spawning in the walls for some reason
-					if (item.y <= 10){item.y = 20;}
+					
 					sndEnemyPickup.play();
 				}
 			}
@@ -829,8 +827,7 @@
 				
 					item.x = (gameBoard.block * (Math.floor(Math.random() * 50) + 1));
 					item.y = (gameBoard.block * (Math.floor(Math.random() * 50) + 1));
-					if (item.x <= 10){item.x = 20;} // prevent stuff from spawning in the walls for some reason
-					if (item.y <= 10){item.y = 20;}
+					
 					player.skipPop = true;
 			}
 		}
@@ -847,19 +844,19 @@
 		sndGameOver.play();
 		sndGameOver.loop = true;
 		
-		cvs2.fillStyle = "#ff3300";
-		cvs2.font = "30px Arial";
-		cvs2.fillText("GAME OVER!", 10, 30);
+		cvs.fillStyle = "#ff3300";
+		cvs.font = "30px Arial";
+		cvs.fillText("GAME OVER!", 10, 620);
 		
-		cvs2.fillStyle = "white";
-		cvs2.font = "15px Arial";
-		cvs2.fillText(player1.name + " scored: " + parseInt(player1.score), 10, 50);
-		cvs2.fillText(player2.name + " scored: " + parseInt(player2.score), 10, 70);
-		cvs2.fillText(player3.name + " scored: " + parseInt(player3.score), 10, 90);
+		cvs.fillStyle = "white";
+		cvs.font = "15px Arial";
+		cvs.fillText(player1.name + " scored: " + parseInt(player1.score), 10, 650);
+		cvs.fillText(player2.name + " scored: " + parseInt(player2.score), 10, 670);
+		cvs.fillText(player3.name + " scored: " + parseInt(player3.score), 10, 690);
 		
-		cvs2.fillStyle = "#ffff00";
-		cvs2.font = "15px Arial";
-		cvs2.fillText("Team Score: " + parseInt(player3.score + player2.score + player1.score), 10, 100);
+		cvs.fillStyle = "#ffff00";
+		cvs.font = "15px Arial";
+		cvs.fillText("Team Score: " + parseInt(player3.score + player2.score + player1.score), 10, 710);
 		
 		// Keep high score records on local storage
 			highScore = parseInt(localStorage.getItem("High Score"));
@@ -875,11 +872,11 @@
 			localStorage.setItem("High Score", highScore.toString());
 			localStorage.setItem("Highest Team Score", teamScore.toString());
 		
-		cvs2.fillStyle = "orange";
-		cvs2.font = "10px Arial";
-		cvs2.fillText("Highest Score: " + highScore, 10, 210);
-		cvs2.fillText("By: " + localStorage.getItem("By"), 10, 240);			
-		cvs2.fillText("Highest Team Score: " + localStorage.getItem("Highest Team Score"), 10, 270);	
+		cvs.fillStyle = "orange";
+		cvs.font = "10px Arial";
+		cvs.fillText("Highest Score: " + highScore, 10, 730);
+		cvs.fillText("By: " + localStorage.getItem("By"), 10, 750);			
+		cvs.fillText("Highest Team Score: " + localStorage.getItem("Highest Team Score"), 100, 750);	
 		
 		
 	}
