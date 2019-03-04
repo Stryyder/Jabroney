@@ -17,6 +17,7 @@
 	let sndGameOver = new Audio(); sndGameOver.src ="sound/sndGameOver.mp3"; sndGameOver.volume = 0.2;
 	let sndLevelUp = new Audio(); sndLevelUp.src="sound/sndLevelUp.wav";
 	let sndEnemyPickup = new Audio(); sndEnemyPickup.src="sound/sndEnemyPickup.wav";
+	let sndTrash = new Audio(); sndTrash.src="sound/sndTrash.mp3";
 	// Graphics
 	let imgSaucer = new Image(); imgSaucer.src ="img/imgSaucer.png";
 	let imgTROJANS = new Image(); imgTROJANS.src ="img/imgTROJANS.png";
@@ -25,6 +26,7 @@
 	let imgBomb = new Image(); imgBomb.src ="img/imgBomb.png";
 	let imgTitle = new Image(); imgTitle.src = "img/imgTitle.jpg"; //eCommerce by BoxCat Games (Attribution)
 	let imgBADFILES = new Image(); imgBADFILES.src = "img/imgBADFILES.png";
+	let imgTrash = new Image(); imgTrash.src = "img/imgTrash.png";
 	
 	
 	// Drawing Board
@@ -48,8 +50,9 @@
 	let BADFILESPoints = 50;
 	let TROJANSPoints = 55;
 	let MEMORYLEAKSPoints = 70;
-	let enemySpawnX = 500;
-	let enemySpawnY = 500;
+	let enemySpawn = [500, 500];
+	let trashCoords = [80, 80];
+	let trashDropped = 0;
 	
 	
 	let consumableItem = function(x, y, consumableType){
@@ -136,17 +139,17 @@
 		switch(numPlayers){
 			case 1:
 				
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 10, "MOB"));
+				enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 10, "MOB"));
 	
 			break;
 			case 2:
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 10, "MOB"));
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 10, "MOB"));
+				enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 10, "MOB"));
+				enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 10, "MOB"));
 			break;
 			case 3:
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 10, "MOB"));
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 10, "MOB"));
-				enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 10, "MOB"));
+				enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 10, "MOB"));
+				enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 10, "MOB"));
+				enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 10, "MOB"));
 			break;
 			default:
 			
@@ -317,78 +320,78 @@
 					
 					case level > 5 && level <= 10:
 						mobColor = "white";
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "white", 20, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "white", 20, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "a little sick";
 						
 					break;
 					
 					case level > 11 && level <= 20:
 						mobColor = "green";
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#222222", 30, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "#222222", 30, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "puking";
 					break;
 					
 					case level > 21 && level <= 30:
 						mobColor = "yellow";
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#111111", 40, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "#111111", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "panicky";
 					break;
 					
 					case level > 31 && level <= 40:
 						mobColor = "#666699";
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#343434", 20, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#434343", 20, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "#343434", 20, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "#434343", 20, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "insane";
 					break;
 					
 					case level > 41 && level <= 50:
 						mobColor = "#EAEAEB";
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#565656", 30, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "#656565", 30, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "#565656", 30, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "#656565", 30, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "febrile";
 					break;
 					
 					case level > 51 && level <= 60:
 						mobColor = "#222";
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "black", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "black", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "suicidal";
 						gameDifficulty += 3;
 					break;
 					
 					case level > 61 && level <= 70:
 						mobColor = "cyan";
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "black", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "black", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "black", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "black", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "hot garbage";
 						gameDifficulty += 5;
 					break;
 					
 					case level > 71:
 						mobColor = "black";
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 20, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 30, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "black", 40, "FAT"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "black", 20, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "black", 30, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "black", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "black", 40, "FAT"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "writing a will";
 						gameDifficulty += 10;
 					break;
@@ -397,7 +400,7 @@
 				
 									
 					for (let i=0; i < numPlayers * gameDifficulty; i++){
-						enemies.push(new Enemy(enemySpawnX,enemySpawnY, mobColor, 10));
+						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], mobColor, 10));
 					}
 				
 				
@@ -411,6 +414,7 @@
 			
 				cvs.clearRect(0, 0, gameBoard.w, gameBoard.h);
 				cvs.drawImage(imgGrid, 0, 0);
+				cvs.drawImage(imgTrash, trashCoords[0], trashCoords[1]);
 				
 				
 				
@@ -432,7 +436,7 @@
 					cvs.fillText("Trojans: " + parseInt(player.TROJANS), x, 700);
 					cvs.fillText("Memory Leaks: " + parseInt(player.MEMORYLEAKS), x, 720);
 					cvs.fillText("F: " + parseInt(player.fullness) + " H: " + parseInt(player.hydration), x, 740); 
-					cvs.fillText("Length: " + parseInt(player.snake.length), x, 760);
+					cvs.fillText("Trashed: " + parseInt(trashDropped), x, 760);
 										
 					cvs.fillStyle = "red";
 					cvs.font = "16px Arial";
@@ -791,6 +795,21 @@
 					sndEnemyPickup.play();
 				}
 			}
+			
+			// Check for trash Dropoff
+			if ((player.snake[0].x >= trashCoords[0]) && 
+				(player.snake[0].x <= (trashCoords[0] + 10)) && 
+				(player.snake[0].y >= trashCoords[1]) && 
+				(player.snake[0].y <= (trashCoords[1] + 10))){
+					
+					sndTrash.play();
+					trashDropped += (parseInt(player.BADFILES) + parseInt(player.TROJANS) + parseInt(player.MEMORYLEAKS));
+					player.BADFILES = 0;
+					player.TROJANS = 0;
+					player.MEMORYLEAKS = 0;
+					
+				}
+			
 			// Check to see if players ate the items
 			if ((player.snake[0].x == item.x) && (player.snake[0].y == item.y)){
 				switch (item){
