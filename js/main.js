@@ -429,13 +429,9 @@
 				
 				
 					cvs.fillStyle = color;
-					cvs.font = "14px Arial";
+					cvs.font = "18px Arial";
 					cvs.fillText(player.name + ": " + parseInt(player.score), x, 640);
 					cvs.fillText("Nerves: " + player.lives, x, 660);
-					cvs.fillText("Bad Files: " + parseInt(player.BADFILES), x, 680);
-					cvs.fillText("Trojans: " + parseInt(player.TROJANS), x, 700);
-					cvs.fillText("Memory Leaks: " + parseInt(player.MEMORYLEAKS), x, 720);
-					cvs.fillText("F: " + parseInt(player.fullness) + " H: " + parseInt(player.hydration), x, 740); 
 					cvs.fillText("Trashed: " + parseInt(trashDropped), x, 760);
 										
 					cvs.fillStyle = "red";
@@ -658,69 +654,63 @@
 			// Executes repetitious AI but with passed in player number
 
 			for (let i = firstEnemyChosen; i < enemies.length; i += enemyCountBy){
-				moveAI = Math.floor(Math.random() * 15) + 1;
+				if (level > 5 && enemies[i].type == "SHOOTER"){ // If it's a shooter change AI pattern
+					moveAI = Math.floor(Math.random() * 7) + 1;
+				}else{	
+					moveAI = Math.floor(Math.random() * 15) + 1;}
+	
+						switch(moveAI){
+							case 1:
+							case 2:
+							case 3:
+								// don't move
+							break;
+							case 12: // Extra cases double the chance of enemy following player
+							case 4: 
+								if ((enemies[i].x <= playerNumber.snake[0].x) && (playerNumber.isAlive == true)){ 
+									enemies[i].x += gameBoard.block;
+								} 
+								break;
+							case 13:
+							case 5: 
+								if ((enemies[i].x >= playerNumber.snake[0].x) && (playerNumber.isAlive == true)){ 
+								enemies[i].x -= gameBoard.block;
+								} 
+								break;
+							case 14:
+							case 6: 
+								if ((enemies[i].y <= playerNumber.snake[0].y) && (playerNumber.isAlive == true)){ 
+								enemies[i].y += gameBoard.block;
+								} 
+								break;
+							case 15:
+							case 7:
+								if ((enemies[i].y >= playerNumber.snake[0].y) && (playerNumber.isAlive == true)){ 
+								enemies[i].y -= gameBoard.block;
+								} 
+								break;
+								
+								// These cases cause enemies to wander a tiny bit
+							case 8:
+								enemies[i].x += gameBoard.block;
+								break;
+							case 9:
+								enemies[i].x -= gameBoard.block;
+								break;	
+							case 10:
+								enemies[i].y += gameBoard.block;
+								break;
+							case 11:
+								enemies[i].y -= gameBoard.block;
+								break;	
+							
+								default:
+								break;
+						}
 				
-				if ((level > 5) && (enemies[i].type == "SHOOTER")){
-					sendEnemyFire(enemies[i]);
-				}
-				
-				
-				switch(moveAI){
-					case 1:
-					case 2:
-					case 3:
-						// don't move
-					break;
-					case 12: // Extra cases double the chance of enemy following player
-					case 4: 
-						if ((enemies[i].x <= playerNumber.snake[0].x) && (playerNumber.isAlive == true)){ 
-							enemies[i].x += gameBoard.block;
-						} 
-						break;
-					case 13:
-					case 5: 
-						if ((enemies[i].x >= playerNumber.snake[0].x) && (playerNumber.isAlive == true)){ 
-						enemies[i].x -= gameBoard.block;
-						} 
-						break;
-					case 14:
-					case 6: 
-						if ((enemies[i].y <= playerNumber.snake[0].y) && (playerNumber.isAlive == true)){ 
-						enemies[i].y += gameBoard.block;
-						} 
-						break;
-					case 15:
-					case 7:
-						if ((enemies[i].y >= playerNumber.snake[0].y) && (playerNumber.isAlive == true)){ 
-						enemies[i].y -= gameBoard.block;
-						} 
-						break;
-						
-						// These cases cause enemies to wander a tiny bit
-					case 8:
-						enemies[i].x += gameBoard.block;
-						break;
-					case 9:
-						enemies[i].x -= gameBoard.block;
-						break;	
-					case 10:
-						enemies[i].y += gameBoard.block;
-						break;
-					case 11:
-						enemies[i].y -= gameBoard.block;
-						break;	
-					
-						default:
-						break;
-				}
 			}
 
-						function sendEnemyFire(shooterEnemy){
-							
-							
-							
-							
-						}
+						
 
 			
 		}
@@ -800,7 +790,9 @@
 			if ((player.snake[0].x >= trashCoords[0]) && 
 				(player.snake[0].x <= (trashCoords[0] + 10)) && 
 				(player.snake[0].y >= trashCoords[1]) && 
-				(player.snake[0].y <= (trashCoords[1] + 10))){
+				(player.snake[0].y <= (trashCoords[1] + 10)) &&
+				((player.BADFILES > 0) || player.TROJANS > 0 || player.MEMORYLEAKS > 0)
+				){
 					
 					sndTrash.play();
 					trashDropped += (parseInt(player.BADFILES) + parseInt(player.TROJANS) + parseInt(player.MEMORYLEAKS));
