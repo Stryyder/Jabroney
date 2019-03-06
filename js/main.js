@@ -37,22 +37,21 @@
 	let level = 1;
 	let highScore = 0; //localStorage.setItem(), clear(), removeItem() etc for high scores
 	let teamScore = 0; // total team score for local storage
-	let scoreRate = .1; 
+	let scoreRate = .1; // score earned by just being alive
 	let numPlayers = 1;
-	let whoIsAliveCode = 1;
-	let starvationRate = 0.003;
-	let fullnessBoost = 0.1;
-	let hydrationBoost = 0.1;
+	let whoIsAliveCode = 1; // code based on every possible occurence of players being alive or dead
+	let starvationRate = 0.003; // rate at which you starve by not eating files
 	let skipPop = false;
 	let enemies = [];
 	let customerStatus = "Perfectly happy";
-	let gameDifficulty = 10; // Starting point adjusts entire gameplay
+	let gameDifficulty = 10; 
 	let BADFILESPoints = 50;
 	let TROJANSPoints = 55;
 	let MEMORYLEAKSPoints = 70;
 	let enemySpawn = [500, 500];
 	let trashCoords = [80, 80];
 	let trashDropped = 0;
+	let warp = [60, 60, 180, 180]; // possible warp zone block from x,y to x,y
 	
 	
 	let consumableItem = function(x, y, consumableType){
@@ -429,7 +428,7 @@
 				
 				
 					cvs.fillStyle = color;
-					cvs.font = "18px Arial";
+					cvs.font = "24px Arial";
 					cvs.fillText(player.name + ": " + parseInt(player.score), x, 640);
 					cvs.fillText("Nerves: " + player.lives, x, 660);
 					cvs.fillText("Trashed: " + parseInt(trashDropped), x, 760);
@@ -654,10 +653,27 @@
 			// Executes repetitious AI but with passed in player number
 
 			for (let i = firstEnemyChosen; i < enemies.length; i += enemyCountBy){
-				if (level > 5 && enemies[i].type == "SHOOTER"){ // If it's a shooter change AI pattern
-					moveAI = Math.floor(Math.random() * 7) + 1;
-				}else{	
-					moveAI = Math.floor(Math.random() * 15) + 1;}
+				
+				switch(level){
+						// Progressilvely add to AI complexity
+					 case 1: moveAI = Math.floor(Math.random() * 1) + 1; break;
+					 case 2: moveAI = Math.floor(Math.random() * 2) + 1; break;
+					 case 3: moveAI = Math.floor(Math.random() * 3) + 1; break;
+					 case 4: moveAI = Math.floor(Math.random() * 4) + 1; break;
+					 case 5: moveAI = Math.floor(Math.random() * 5) + 1; break;
+					 case 6: moveAI = Math.floor(Math.random() * 6) + 1; break;
+					 case 7: moveAI = Math.floor(Math.random() * 7) + 1; break;
+					 case 8: moveAI = Math.floor(Math.random() * 8) + 1; break;
+					 case 9: moveAI = Math.floor(Math.random() * 9) + 1; break;
+					 case 10: moveAI = Math.floor(Math.random() * 10) + 1; break;
+					 case 11: moveAI = Math.floor(Math.random() * 11) + 1; break;
+					 case 12: moveAI = Math.floor(Math.random() * 12) + 1; break;
+					 case 13: moveAI = Math.floor(Math.random() * 13) + 1; break;
+					 case 14: moveAI = Math.floor(Math.random() * 14) + 1; break;
+					 default:
+						moveAI = Math.floor(Math.random() * 15) + 1;
+						break;
+				}
 	
 						switch(moveAI){
 							case 1:
