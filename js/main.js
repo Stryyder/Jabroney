@@ -677,18 +677,18 @@
 	
 						switch(moveAI){
 							case 1:
-							case 2:
-							case 3:
-								// don't move
+							case 4:
+							case 5:
+								// don't move (out of order to increase feeling of AI growth)
 							break;
 							case 12: // Extra cases double the chance of enemy following player
-							case 4: 
+							case 3: 
 								if ((enemies[i].x <= playerNumber.snake[0].x) && (playerNumber.isAlive == true)){ 
 									enemies[i].x += gameBoard.block;
 								} 
 								break;
 							case 13:
-							case 5: 
+							case 2: 
 								if ((enemies[i].x >= playerNumber.snake[0].x) && (playerNumber.isAlive == true)){ 
 								enemies[i].x -= gameBoard.block;
 								} 
