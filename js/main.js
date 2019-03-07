@@ -22,7 +22,16 @@
 	let imgSaucer = new Image(); imgSaucer.src ="img/imgSaucer.png";
 	let imgTROJANS = new Image(); imgTROJANS.src ="img/imgTROJANS.png";
 	let imgMEMORYLEAKS = new Image(); imgMEMORYLEAKS.src ="img/imgMEMORYLEAKS.png";
-	let imgGrid = new Image(); imgGrid.src = "img/imgGrid.jpg";
+	let imgGrid = [];
+		imgGrid[0] = new Image(); imgGrid[0].src = "img/imgGrid.jpg";
+		imgGrid[1] = new Image(); imgGrid[1].src = "img/imgGrid1.jpg";
+		imgGrid[2] = new Image(); imgGrid[2].src = "img/imgGrid2.jpg";
+		imgGrid[3] = new Image(); imgGrid[3].src = "img/imgGrid3.jpg";
+		imgGrid[4] = new Image(); imgGrid[4].src = "img/imgGrid4.jpg";
+		imgGrid[5] = new Image(); imgGrid[5].src = "img/imgGrid5.jpg";
+		imgGrid[6] = new Image(); imgGrid[6].src = "img/imgGrid6.jpg";
+		imgGrid[7] = new Image(); imgGrid[7].src = "img/imgGrid7.jpg";
+		imgGrid[8] = new Image(); imgGrid[8].src = "img/imgGrid8.jpg";
 	let imgBomb = new Image(); imgBomb.src ="img/imgBomb.png";
 	let imgTitle = new Image(); imgTitle.src = "img/imgTitle.jpg"; //eCommerce by BoxCat Games (Attribution)
 	let imgBADFILES = new Image(); imgBADFILES.src = "img/imgBADFILES.png";
@@ -34,7 +43,8 @@
 	
 
 	// Game Globals
-	let level = 1;
+	let level = 1; 
+	let levelBG = 0; // Decider for which background image to paint
 	let highScore = 0; //localStorage.setItem(), clear(), removeItem() etc for high scores
 	let teamScore = 0; // total team score for local storage
 	let scoreRate = .1; // score earned by just being alive
@@ -65,7 +75,7 @@
 		let MEMORYLEAKS = new consumableItem (150, 150, "MEMORYLEAKS");	
 	
 	let gameBoard = {
-		gameSpeed: 50, // higher number - higher interval = slower gameplay
+		gameSpeed: 40, // higher number = higher interval = slower gameplay
 		projectileSpeed: 6750,
 		state: "Title",
 		w: 600,
@@ -252,6 +262,10 @@
 					gameBoard.gameSpeed += 10;
 					break;
 					
+				case 106: // Multiply key (level up for testing)
+					player1.score += 1000;
+					break;
+					
 				// volume controls numpad +/- 107/109
 				case 107:
 					if (sndTitle.volume <= 0.8){sndTitle.volume += 0.1;}
@@ -322,6 +336,7 @@
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "white", 20, "FAT"));
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "a little sick";
+						levelBG = 1;
 						
 					break;
 					
@@ -330,6 +345,7 @@
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "#222222", 30, "FAT"));
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "puking";
+						levelBG = 2;
 					break;
 					
 					case level > 21 && level <= 30:
@@ -337,6 +353,7 @@
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "#111111", 40, "FAT"));
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "panicky";
+						levelBG = 3;
 					break;
 					
 					case level > 31 && level <= 40:
@@ -346,6 +363,7 @@
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "insane";
+						levelBG = 4;
 					break;
 					
 					case level > 41 && level <= 50:
@@ -355,6 +373,7 @@
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "febrile";
+						levelBG = 5;
 					break;
 					
 					case level > 51 && level <= 60:
@@ -365,6 +384,7 @@
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "suicidal";
 						gameDifficulty += 3;
+						levelBG = 6;
 					break;
 					
 					case level > 61 && level <= 70:
@@ -379,6 +399,7 @@
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "hot garbage";
 						gameDifficulty += 5;
+						levelBG = 7;
 					break;
 					
 					case level > 71:
@@ -391,8 +412,9 @@
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
-						customerStatus = "writing a will";
+						customerStatus = "feeling ludite";
 						gameDifficulty += 10;
+						levelBG = 8;
 					break;
 					
 				}
@@ -410,9 +432,9 @@
 
 
 	function clearBoard(){
-			
+				
 				cvs.clearRect(0, 0, gameBoard.w, gameBoard.h);
-				cvs.drawImage(imgGrid, 0, 0);
+				cvs.drawImage(imgGrid[levelBG], 0, 0);
 				cvs.drawImage(imgTrash, trashCoords[0], trashCoords[1]);
 				
 				
