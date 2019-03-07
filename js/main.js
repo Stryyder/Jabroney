@@ -63,7 +63,6 @@
 	let trashDropped = 0;
 	let warp = [60, 60, 180, 180]; // possible warp zone block from x,y to x,y
 	
-	
 	let consumableItem = function(x, y, consumableType){
 			this.x = x;
 			this.y = y;
@@ -91,7 +90,7 @@
 	// Coordinates, name, color, tail color, score location coords
 	let Player = function(x, y, name, c ,tc, statusX, statusY){
 			this.isAlive = true;
-			this.lives = 10;
+			this.lives = 3;
 			this.snake = [{x: x, y: y}]; 
 			this.snakeX = 0;
 			this.snakeY = 0;
@@ -112,7 +111,6 @@
 			this.statusY = statusY;
 						
 	};
-
 	
 	let Enemy = function(x,y,c,s,t){
 		this.x = x;
@@ -122,18 +120,12 @@
 		this.type = t;
 		this.projectilePosition = [0, 0];
 	};
-	
 
-	
-	
 	// Instantiate Players and Enemies
 	let player1 = new Player(100,400, "Bob", "#80b3ff", "#ccddff", 20, 100);
 	let player2 = new Player(200,400, "Carl", "#00ff00", "#b3ffb3", 220, 100);
 	let player3 = new Player(300,400, "Jimmy", "#ff9900", "#ffd1b3", 420, 100);
-	
-	
-	
-		
+
 	// PREVENT CANVAS SCROLLING WITH GAMEPLAY
 	window.addEventListener("keydown", function(e) {
     // space and arrow keys
@@ -142,7 +134,6 @@
     }
 }, false);	
 		
-	
 	function setupGame(){
 		// Add initial enemies
 		switch(numPlayers){
@@ -286,6 +277,7 @@
 			if (player.snake[0].y >= gameBoard.maxY){player.snake[0].y = gameBoard.minY+10;}
 				
 	 }
+	 
 	function enemyBoundaryCheck(enemy){
 			if (enemy.x <= gameBoard.minX){enemy.x = gameBoard.maxX-10;}		
 			if (enemy.y <= gameBoard.minY){enemy.y = gameBoard.maxY-10;}		
@@ -427,9 +419,6 @@
 				
 			}
 		}
-			
-	 
-
 
 	function clearBoard(){
 				
@@ -490,8 +479,6 @@
 				}
 
 	 }
-	 
-
 	 
 	function drawPlayers(player){
 		 
@@ -569,9 +556,6 @@
 					cvs.fillRect(enemies[i].x, enemies[i].y, enemies[i].size, enemies[i].size);
 				}
 	}
-		 
-	
-	 
 	 
 	function enemyAI(){
 		// numPlayers
@@ -757,7 +741,6 @@
 	
 	} 
 	
-	
 	function projectileAI(){
 		for (let i = 0; i < enemies.length; i ++){
 			switch(enemies[i].type){
@@ -883,12 +866,9 @@
 		
 
 	}
-	
-
-	
 
 	function gameOver(){
-		//clearInterval(gameLoop);
+		
 		sndTitle.pause();
 		sndGameOver.play();
 		sndGameOver.loop = true;
@@ -929,7 +909,8 @@
 		
 		
 	}
- function titleScreen(){
+	
+	function titleScreen(){
 				
 				cvs.fillStyle = "#000000";
 				cvs.fillRect(0, 0, 600, 600);
