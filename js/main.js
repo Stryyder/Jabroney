@@ -36,11 +36,9 @@
 	let imgTitle = new Image(); imgTitle.src = "img/imgTitle.jpg"; //eCommerce by BoxCat Games (Attribution)
 	let imgBADFILES = new Image(); imgBADFILES.src = "img/imgBADFILES.png";
 	let imgTrash = new Image(); imgTrash.src = "img/imgTrash.png";
-	
-	
+
 	// Drawing Board
 	const cvs = document.getElementById("canvas").getContext("2d");
-	
 
 	// Game Globals
 	let level = 1; 
@@ -323,32 +321,35 @@
 						mobColor = "red";
 					break;
 					
-					case level > 5 && level <= 10:
+					case level >= 5 && level <= 10:
 						mobColor = "white";
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "white", 20, "FAT"));
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "a little sick";
 						levelBG = 1;
+						trashCoords = [100, 100];
 						
 					break;
 					
-					case level > 11 && level <= 20:
+					case level >= 11 && level <= 20:
 						mobColor = "green";
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "#222222", 30, "FAT"));
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "puking";
 						levelBG = 2;
+						trashCoords = [200, 200];
 					break;
 					
-					case level > 21 && level <= 30:
+					case level >= 21 && level <= 30:
 						mobColor = "yellow";
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "#111111", 40, "FAT"));
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "panicky";
 						levelBG = 3;
+						trashCoords = [300, 300];
 					break;
 					
-					case level > 31 && level <= 40:
+					case level >= 31 && level <= 40:
 						mobColor = "#666699";
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "#343434", 20, "FAT"));
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "#434343", 20, "FAT"));
@@ -356,9 +357,10 @@
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "insane";
 						levelBG = 4;
+						trashCoords = [400, 400];
 					break;
 					
-					case level > 41 && level <= 50:
+					case level >= 41 && level <= 50:
 						mobColor = "#EAEAEB";
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "#565656", 30, "FAT"));
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "#656565", 30, "FAT"));
@@ -366,9 +368,10 @@
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "febrile";
 						levelBG = 5;
+						trashCoords = [400, 500];
 					break;
 					
-					case level > 51 && level <= 60:
+					case level >= 51 && level <= 60:
 						mobColor = "#222";
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "black", 40, "FAT"));
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "black", 40, "FAT"));
@@ -377,9 +380,10 @@
 						customerStatus = "suicidal";
 						gameDifficulty += 3;
 						levelBG = 6;
+						trashCoords = [500, 500];
 					break;
 					
-					case level > 61 && level <= 70:
+					case level >= 61 && level <= 70:
 						mobColor = "cyan";
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "black", 40, "FAT"));
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "black", 40, "FAT"));
@@ -392,9 +396,10 @@
 						customerStatus = "hot garbage";
 						gameDifficulty += 5;
 						levelBG = 7;
+						trashCoords = [520, 420];
 					break;
 					
-					case level > 71:
+					case level >= 71:
 						mobColor = "black";
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "black", 20, "FAT"));
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "black", 30, "FAT"));
@@ -407,6 +412,7 @@
 						customerStatus = "feeling ludite";
 						gameDifficulty += 10;
 						levelBG = 8;
+						trashCoords = [540, 480];
 					break;
 					
 				}
