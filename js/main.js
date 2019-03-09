@@ -1,4 +1,8 @@
 	// Jabroney - by Toby
+	// Currently doing a line by line rework to prepare for any future changes
+	// big problems: too many loops through main enemy array which is just not good design and probably causes lag
+	// future featuers: shooting enemies!
+	// 3/9/2019
 	
 	// Sound
 	let sndTROJANS = new Audio(); sndTROJANS.src = "sound/sndTROJANS.wav";
@@ -59,7 +63,7 @@
 	let enemySpawn = [500, 500];
 	let trashCoords = [80, 80];
 	let trashDropped = 0;
-	let warp = [60, 60, 180, 180]; // possible warp zone block from x,y to x,y
+	
 	
 	let consumableItem = function(x, y, consumableType){
 			this.x = x;
@@ -553,14 +557,16 @@
 	 
 	function drawEnemies(){
 				enemyAI(); // move the AI around before painting enemies
+								
 				
-				projectileAI(); // move the bullets around before painting bullets
-				// Paint the enemies
+				// Paint the enemies and bullets
 				for (let i = 0; i < enemies.length; i++){
 					enemyBoundaryCheck(enemies[i]);
 					cvs.fillStyle = enemies[i].color;
 					cvs.fillRect(enemies[i].x, enemies[i].y, enemies[i].size, enemies[i].size);
 				}
+				
+				
 	}
 	 
 	function enemyAI(){
@@ -663,9 +669,9 @@
 		}
 		function executeAI(playerNumber, firstEnemyChosen, enemyCountBy){
 			// Executes repetitious AI but with passed in player number
-
+			
 			for (let i = firstEnemyChosen; i < enemies.length; i += enemyCountBy){
-				
+					
 				switch(level){
 						// Progressilvely add to AI complexity
 					 case 1: moveAI = Math.floor(Math.random() * 1) + 1; break;
@@ -691,7 +697,7 @@
 							case 1:
 							case 4:
 							case 5:
-								// don't move (out of order to increase feeling of AI growth)
+								// don't move (case numbers out of order to increase feeling of AI "growth")
 							break;
 							case 12: // Extra cases double the chance of enemy following player
 							case 3: 
@@ -737,9 +743,6 @@
 						}
 				
 			}
-
-						
-
 			
 		}
 
@@ -747,29 +750,7 @@
 	
 	} 
 	
-	function projectileAI(){
-		for (let i = 0; i < enemies.length; i ++){
-			switch(enemies[i].type){
-				
-				case "MOB":
-				break;
-				
-				case "FAT":
-				break;
-				
-				case "SHOOTER":
-					enemies[i].projectilePosition = [enemies[i].x, enemies[i].y];
-					console.log(enemies[i].projectilePosition);
-					
-					// checkIfShot();
-					
-				break;
-				
-				default:
-				break;
-			}
-		}
-	}
+	
 	
 	function checkForDamage(enemy, player){
 			if ((enemy.x == player.snake[0].x) && (enemy.y == player.snake[0].y) && (player.isAlive == true)){
