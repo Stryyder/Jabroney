@@ -127,7 +127,7 @@
 	let player1 = new Player(100,400, "Bob", "#80b3ff", "#ccddff", 20, 100);
 	let player2 = new Player(200,400, "Carl", "#00ff00", "#b3ffb3", 220, 100);
 	let player3 = new Player(300,400, "Jimmy", "#ff9900", "#ffd1b3", 420, 100);
-
+	
 	// PREVENT CANVAS SCROLLING WITH GAMEPLAY
 	window.addEventListener("keydown", function(e) {
     // space and arrow keys
@@ -176,6 +176,7 @@
 				drawPlayerIfAlive(player1);
 				drawPlayerIfAlive(player2);
 				drawPlayerIfAlive(player3);
+				
 					
 
 				// General Draws
@@ -303,22 +304,17 @@
 	 
 	function updateLevel(){
 			if ((player1.score + player2.score + player3.score)>= gameBoard.scoreModifier){
-				
-					
-					sndLevelUp.play();
-					cvs.fillStyle="blue";
-					cvs.fillRect(0,0,gameBoard.maxX, gameBoard.maxY);
-					enemies = [];
+	
+				sndLevelUp.play();
+				cvs.fillStyle="blue";
+				cvs.fillRect(0,0,gameBoard.maxX, gameBoard.maxY);
+				enemies = [];
 				
 				gameBoard.scoreModifier += 400;
 				gameDifficulty += 1;
 				playerResetOnLevelUp();
 				let mobColor = "white";
-				
-				
-				
-				
-				
+	
 				switch (true){
 					
 					case level <= 5:
@@ -328,7 +324,6 @@
 					case level >= 5 && level <= 10:
 						mobColor = "white";
 						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "white", 20, "FAT"));
-						enemies.push(new Enemy(enemySpawn[0],enemySpawn[1], "red", 20, "SHOOTER"));
 						customerStatus = "a little sick";
 						levelBG = 1;
 						trashCoords = [100, 100];
@@ -565,13 +560,11 @@
 					cvs.fillStyle = enemies[i].color;
 					cvs.fillRect(enemies[i].x, enemies[i].y, enemies[i].size, enemies[i].size);
 				}
-				
-				
+	
 	}
 	 
 	function enemyAI(){
-		// numPlayers
-		
+				
 		let moveAI = 0;
 			// Give each enemy a randomized-ish action but trending towards a player it's chasing 
 			
@@ -669,7 +662,7 @@
 		}
 		function executeAI(playerNumber, firstEnemyChosen, enemyCountBy){
 			// Executes repetitious AI but with passed in player number
-			
+			// firstEnemyChosen is to account for different numbers of active players
 			for (let i = firstEnemyChosen; i < enemies.length; i += enemyCountBy){
 					
 				switch(level){
@@ -703,7 +696,8 @@
 							case 3: 
 								if ((enemies[i].x <= playerNumber.snake[0].x) && (playerNumber.isAlive == true)){ 
 									enemies[i].x += gameBoard.block;
-								} 
+								}
+								
 								break;
 							case 13:
 							case 2: 
@@ -746,8 +740,6 @@
 			
 		}
 
-		
-	
 	} 
 	
 	
