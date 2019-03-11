@@ -1,8 +1,7 @@
 	// Jabroney - by Toby
-	// Currently doing a line by line rework to prepare for any future changes
-	// big problems: too many loops through main enemy array which is just not good design and probably causes lag
-	// future featuers: shooting enemies!
-	// 3/9/2019
+	// I learned a lot from this project, but I see a lot of ways in which it is constructed poorly
+	// I'll be using that knowledge to move on to something bigger and better!
+	// 3/11/2019
 	
 	// Sound
 	let sndTROJANS = new Audio(); sndTROJANS.src = "sound/sndTROJANS.wav";
